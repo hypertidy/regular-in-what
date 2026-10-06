@@ -1,0 +1,158 @@
+# How the communities see it {#sec-communities}
+
+Gridded data is handled by several communities that grew up separately.
+Each has a default answer to the two questions, built into its formats and
+its software, and each default is right for the work that community mostly
+does. This chapter describes each view in its own terms first, then puts
+them side by side.
+
+## Remote sensing and GIS
+
+**Typical tools:** GDAL's classic raster model, GeoTIFF and COG, terra,
+rasterio, QGIS.
+
+The working model here is that an image starts raw and ends rectified. A
+sensor captures pixels with messy geometry; ground control points, rational
+polynomial coefficients or geolocation arrays describe that geometry; the
+data is warped onto a map grid; the map grid is the product. The affine
+geotransform describes the finished state, so a "proper" raster is a
+regular grid with six numbers and a CRS. Anything else is an intermediate
+form waiting to be corrected.
+
+The answer to question one is therefore "regular, or not yet". The answer
+to question two is "whatever CRS the geotransform is in", carried as a full
+CRS definition.
+
+**What this view gets right:** it never stores a regular grid expensively,
+it carries the frame, and it has two decades of warping machinery for
+turning anything into a regular grid.
+
+**Where it struggles:** it has one slot for "not regular", the geolocation
+array, which lumps together a sensor swath, an ocean model's tripolar grid
+and a projected grid written out as longitude and latitude. It cannot tell
+case E from case H in @tbl-costumes without help. It also tends to reject
+frames it did not expect: GDAL's classic netCDF reader will not accept
+rotated-pole axes as x and y by default (@sec-case-cordex).
+
+## Climate and ocean modelling
+
+**Typical tools:** netCDF and the CF conventions, CDO, NCO, ESMF, xarray.
+
+A model runs on a computational grid, writes output on that grid, and the
+grid *is* the coordinate system. A NEMO modeller with 2D `nav_lon` and
+`nav_lat` arrays is not thinking "this needs rectification". Those arrays
+describe where every cell is, completely, and regridding to something else
+is an analytical choice with explicit methods (bilinear, conservative,
+nearest neighbour), not a correction. That is why there is no
+"warp on read" in this world and why nobody in it talks about
+rectification.
+
+CF encodes the answer to question one through the shape of coordinate
+variables: 1D coordinate variables named after their dimension for regular
+and rectilinear grids, 2D auxiliary coordinate variables listed in a
+`coordinates` attribute for curvilinear ones. Question two is answered by a
+`grid_mapping` variable, added later in CF's history and often treated as
+optional, with `crs_wkt` added in CF 1.7 as a supplement.
+
+**What this view gets right:** coordinate arrays are the honest description
+of grids that really are curvilinear, which most model grids near the poles
+are. It keeps the native grid authoritative.
+
+**Where it struggles:** it reads geometry from storage shape, so a
+regular grid stored as 2D arrays is labelled curvilinear. It stores regular
+grids as coordinate arrays by default (case C). The frame is often missing
+or broken, because a file with good longitude and latitude arrays still
+"works" without it. In the MAR CORDEX file the `grid_mapping` attribute
+pointed at a variable name that did not exist; nothing warned.
+
+## Array computing
+
+**Typical tools:** NumPy, xarray's core data model, Zarr, VirtualiZarr and
+icechunk.
+
+Here an array has named dimensions, which are axes, and coordinates, which
+are labels attached to those axes. A coordinate is just a value per
+position. Geography is not special: latitude, depth, time and ensemble
+member are all coordinates.
+
+This view gives question one a natural home (1D coordinates on one
+dimension, 2D coordinates on two) and question two none at all; a CRS is
+metadata some other layer may interpret. Until 2025, xarray had no way to
+represent "this coordinate is regular" except by materialising every value.
+Recent releases added `RangeIndex` and a general `CoordinateTransformIndex`,
+and the rasterix package builds an affine `RasterIndex` on it, so a regular
+grid can now be held as a transform.
+
+**What this view gets right:** uniform handling of every dimension, lazy
+computation, and a clean separation between data and labels.
+
+**Where it struggles:** the frame does not travel with the coordinates
+unless something makes it. In Earthmover's icechunk copy of GOES-16, the
+scan-angle coordinates were carried faithfully across four time partitions,
+and the geostationary projection needed to interpret them was not
+(@sec-case-goes). The word "dimension" also means something different here
+than in geometry (@sec-two-questions).
+
+## Scientific visualisation and computational fluid dynamics
+
+**Typical tools:** VTK, ParaView, the grid taxonomies taught with them.
+
+This community gave us the cleanest version of the ladder. VTK has a data
+type per rung: image data (uniform), rectilinear grid, structured grid
+(curvilinear), unstructured grid. The distinction is entirely about how
+positions are stored: implicitly, semi-implicitly, or explicitly.
+
+**What this view gets right:** it separates index structure from position
+completely, and its vocabulary is precise.
+
+**Where it struggles:** there is no CRS. Positions are numbers in one
+Cartesian space, so the question "regular in what?" never arises. Imported
+into geoscience, the taxonomy is applied to whatever coordinates the file
+happens to store, which is how a polar stereographic grid stored as
+longitude and latitude becomes "structured" rather than "image data".
+
+## Meshes and global grid systems
+
+**Typical tools:** UGRID, H3, S2, HEALPix, triangulation libraries.
+
+This view starts from the surface of the Earth instead of from an array. If
+the sphere comes first, a grid's job is to cover it sensibly: correct
+adjacency across the antimeridian, no thousands of redundant cells at the
+pole, often equal area. The row and column index is given up, deliberately.
+
+**Where it meets this book:** the ladder is silent about the manifold, and
+these systems exist because some problems need the manifold built in
+(@sec-edges). The same confusion also appears in meshes: triangulating
+longitude and latitude as if they were planar x and y is the mesh version
+of treating a frame as if it were geometry.
+
+## Plotting
+
+**Typical tools:** base R `image()` and `rasterImage()`, matplotlib
+`imshow()` and `pcolormesh()`, cartopy.
+
+Plotting libraries embody the ladder without naming it. `rasterImage()` and
+`imshow(extent=...)` take an image and a bounding box: a regular grid.
+`image()` takes coordinate vectors: a rectilinear grid, with edges or
+centres. `pcolormesh()` takes 1D or 2D coordinates and draws quadrilaterals:
+rectilinear or curvilinear. They answer question one by their argument
+types, ignore question two, and are a common source of the half-pixel
+confusion between edges and centres.
+
+## Side by side
+
+| Community | Default unit of truth | Question one comes from | Question two comes from | Typical blind spot |
+|---|---|---|---|---|
+| Remote sensing, GIS | affine transform | is there a geotransform? | full CRS on the dataset | one bucket for every non-affine grid; unfamiliar frames rejected |
+| Climate, ocean modelling | coordinate arrays | shape of coordinate variables | optional `grid_mapping` | storage shape read as geometry; frame often missing |
+| Array computing | labelled axes | 1D or 2D coordinates | not modelled | frame does not travel with coordinates |
+| Scientific visualisation | storage type | data type | none | no notion of frame |
+| Meshes, DGGS | cells on the sphere | explicit topology | built into the cell scheme | lon/lat treated as planar in meshes |
+| Plotting | function signature | argument types | external (cartopy, map projections) | edges vs centres |
+
+: How each community answers the two questions. {#tbl-communities}
+
+Read across a row and each view is coherent. Read down a column and the
+problem appears: there is no shared answer to either question, and nothing
+in the data says which community wrote it. The next chapter shows what the
+software built by these communities actually does with the same files.

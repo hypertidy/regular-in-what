@@ -1,0 +1,52 @@
+# Glossary and crosswalk {#sec-glossary}
+
+## Terms as this book uses them
+
+**Frame.** The coordinate system positions are written in: geographic
+longitude and latitude, a projected CRS, rotated longitude and latitude, a
+scan-angle system, or none. Grid type is always relative to a frame.
+
+**Regular (in a frame).** Positions follow from the index by origin plus
+step in each direction. Six numbers for a 2D grid: dimension and extent,
+or equivalently an affine transform.
+
+**Rectilinear (in a frame).** Each axis has its own 1D sequence of positions,
+with varying spacing; cells are at their outer product.
+
+**Curvilinear (in a frame).** Cells are indexed by row and column but their
+positions are not an outer product of two sequences. *Genuinely
+curvilinear* means curvilinear in every frame tried.
+
+**Unstructured.** No row and column index; positions and connectivity are
+explicit.
+
+**Binned grid (L3 bins).** NASA's integerized sinusoidal scheme: rows of
+equal latitude height, each with a whole number of near-equal-area bins.
+Unstructured (no (i, j) index) but implicit (positions from the bin number).
+
+**Logically rectangular.** Indexable as (i, j); covers regular, rectilinear
+and curvilinear (Balaji).
+
+**Degenerate rectilinear.** A regular grid stored as 1D coordinate vectors.
+
+**Cryptic curvilinear.** A grid stored as 2D coordinate arrays that is
+regular in some other frame.
+
+**Geolocation array.** GDAL's term for per-pixel coordinate arrays. Covers
+cryptic curvilinear grids, model grids and sensor swaths alike.
+
+**Dimension (arrays).** An axis of an array. Not a coordinate count and not
+a shape's topological dimension.
+
+## The same idea in different vocabularies
+
+| This book | VTK, visualisation | ESMF, Balaji | CF, netCDF | GDAL classic | xarray | stars (R) |
+|---|---|---|---|---|---|---|
+| regular | image data, uniform | uniform | 1D coordinate variables, evenly spaced | geotransform | 1D coords; `RangeIndex` or rasterix `RasterIndex` | regular dimension |
+| rectilinear | rectilinear grid | rectilinear | 1D coordinate variables | geolocation, or geotransform if regular enough | 1D coords | rectilinear dimension |
+| curvilinear | structured grid | curvilinear | 2D auxiliary coordinates (`coordinates` attribute) | geolocation arrays | 2D coords | curvilinear |
+| unstructured | unstructured grid | (outside logically rectangular) | UGRID | not modelled | (via uxarray and similar) | not modelled |
+| frame | (none) | coordinate system | `grid_mapping`, `crs_wkt` | spatial reference | not modelled (xproj adds a CRS index) | crs |
+| centre vs edge | point vs cell data | centre vs corner stagger | `bounds`, corner arrays | PixelIsPoint vs PixelIsArea | (by convention) | offset, cell vs point |
+
+: One concept per row, one community per column. Blank or "not modelled" cells are real gaps. {#tbl-crosswalk}

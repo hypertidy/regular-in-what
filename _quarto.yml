@@ -1,0 +1,39 @@
+project:
+  type: book
+  output-dir: _book
+
+book:
+  title: "Regular in what?"
+  subtitle: "Grids, coordinates, and the curvilinear confusion"
+  author: "Michael Sumner"
+  date: today
+  chapters:
+    - index.qmd
+    - part: "The idea"
+      chapters:
+        - 01-problem.qmd
+        - 02-two-questions.qmd
+        - 03-costumes.qmd
+    - part: "The people and the tools"
+      chapters:
+        - 04-communities.qmd
+        - 05-software.qmd
+    - part: "Finding your way"
+      chapters:
+        - 06-field-guide.qmd
+        - 07-cases.qmd
+        - 08-edges.qmd
+  appendices:
+    - glossary.qmd
+    - recipes.qmd
+    - references.qmd
+
+format:
+  html:
+    theme: cosmo
+    toc: true
+    number-sections: true
+    code-copy: true
+
+execute:
+  eval: false

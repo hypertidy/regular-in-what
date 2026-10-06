@@ -1,0 +1,72 @@
+# Preface {.unnumbered}
+
+This is a short book about one confusion in gridded data, and about the
+communities and software that keep it alive.
+
+People say a grid is "curvilinear" when they mean several different things:
+that its coordinates are stored as two-dimensional longitude and latitude
+arrays, that it is in geographic coordinates at all, or that its cells
+really do follow curved lines that no simple formula can describe. Those
+are different claims. Treating them as one leads to files that are
+hundreds of thousands of times larger than they need to be, to coordinates
+that are less precise than the numbers they replaced, to software that
+refuses a perfectly regular grid, and to analysis that resamples data that
+never needed resampling.
+
+## The stance
+
+The book takes one position and argues it throughout:
+
+> **A grid is not regular, rectilinear or curvilinear on its own. It is
+> regular, rectilinear or curvilinear *in a frame*.**
+
+"What kind of grid is this?" is really two questions. How is each cell's
+position worked out from its row and column? And in which coordinate frame
+are those positions written down? The second question changes the answer to
+the first. The NSIDC 25 km sea ice grid is regular in its polar
+stereographic frame and curvilinear in longitude and latitude. A
+rotated-pole climate model grid is regular in rotated longitude and latitude
+and curvilinear in true longitude and latitude. Neither grid changed; only
+the frame did.
+
+So when this book says "regular", it always means "regular in some named
+frame", and the most useful question to ask of any dataset is the title:
+*regular in what?*
+
+## Who this is for
+
+Gridded data is shared between communities that learned to think about it
+in different ways. Remote sensing and GIS treat an affine transform as the
+truth and everything else as something to be warped away. Climate and ocean
+modelling treat coordinate arrays as the complete description of a grid.
+Array computing treats dimensions as axes and coordinates as labels.
+Scientific visualisation classifies grids by how much must be stored, and
+has no coordinate reference system at all. Each view is right for the work
+it grew up doing. The trouble happens where they meet.
+
+This book is for people who meet that boundary: a modeller whose output has
+to work in GIS tools, a remote sensing analyst handed a netCDF file, a
+software developer writing a reader, a data producer deciding how to store
+coordinates. It does not assume you belong to any one of those camps, and
+it tries to explain each one in its own terms before comparing them.
+
+## How to read it
+
+- Part I (chapters 1 to 3) sets out the idea: the problem, the two
+  questions, and the many ways one grid can be stored.
+- Part II (chapters 4 and 5) puts the communities and their software side by
+  side on the same data.
+- Part III (chapters 6 to 8) is for working with real files: a field guide,
+  worked cases, and where the whole framework stops applying.
+
+Code is shown in R and Python, and in GDAL command line form where that is
+simplest. It is not run when the book is built. The figures are built from
+published grid specifications by `scripts/make_figures.py`, and the numbers
+quoted alongside them come from that script.
+
+## Where this comes from
+
+The material here was consolidated from blog posts on hypertidy.org
+(2022 to 2026), working notes in the gdal-r-python repository, two earlier
+book drafts (rw-book and a-book), the trianglewins note "On dimension", and
+several long working conversations. The source map is in `README.md`.

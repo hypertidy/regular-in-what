@@ -1,0 +1,178 @@
+# A field guide {#sec-field-guide}
+
+This chapter is for when you have a file and need to know what grid is in
+it. It assumes no allegiance to any of the communities in @sec-communities.
+
+## Two questions, in order
+
+Work out the frame first, then the regularity. Most mistakes come from doing
+it the other way round.
+
+```
+1. What frames does the file declare?
+   - a grid_mapping variable or crs_wkt?             -> a declared CRS
+   - axis standard_name projection_x/y_coordinate?   -> projected (metric) axes
+   - axis standard_name grid_longitude/latitude?     -> rotated lon/lat axes
+   - 1D x/y with no units you recognise?             -> check for a projection
+                                                        variable (e.g. GOES)
+   - only longitude and latitude?                    -> geographic, or unknown
+
+2. Is there a 1D axis per dimension in a declared frame?
+   - yes, evenly spaced (within tolerance)  -> regular. Read it. Done.
+   - yes, spacing varies                    -> rectilinear in that frame;
+                                               still check step 3 (Mercator?)
+   - no, only 2D coordinates                -> go to step 3
+
+3. Is the grid regular in some frame you can name?
+   - CRS declared but only 2D lon/lat stored  -> project lon/lat into it,
+                                                 test regularity (verify)
+   - axes present but no CRS                  -> the axes are the grid; fit
+                                                 only the CRS (recover)
+   - neither                                  -> try candidate frames
+                                                 (blind fit)
+   - nothing fits                             -> genuinely curvilinear;
+                                                 keep the arrays
+```
+
+The three routes in step 3 come from the CORDEX work (@sec-case-cordex),
+and they differ in what can be recovered.
+
+## Testing regularity
+
+Regular means "evenly spaced within a tolerance relative to the step", never
+"every step is exactly equal". Stored coordinates carry floating point
+noise (@fig-float32), and an exact test fails on almost every real file.
+
+For a 1D axis:
+
+```python
+import numpy as np
+d = np.diff(x)
+step = np.median(d)
+regular = np.ptp(d) <= 1e-6 * abs(step)     # tune: 1e-9 for float64, looser for float32
+```
+
+```r
+d <- diff(x)
+step <- median(d)
+regular <- diff(range(d)) <= 1e-6 * abs(step)
+```
+
+For 2D coordinates already in a candidate frame, ask three things: are rows
+horizontal (the y values along each row have small spread), are columns
+vertical, and are the x and y steps constant? Report the worst deviation as
+a fraction of the step.
+
+Two traps:
+
+- **Angular frames wrap.** In a rotated or geographic frame that crosses
+  its own antimeridian, raw differences jump by 360. Wrap differences into
+  -180 to 180 before measuring. In the RACMO file this turned a
+  "deviation of 360, not regular" into about 1e-12.
+- **Never take an extent from `range(lon)`.** For a polar cap the
+  antimeridian runs through the interior, so the longitude range is the full
+  circle regardless of where the grid's edges are (@fig-nsidc). An extent
+  only means something in the frame where the grid is regular.
+
+## Trying candidate frames
+
+When only 2D longitude and latitude are available, project them into
+plausible frames and test each. A worked version, using the NSIDC grid with
+its longitude and latitude stored as 32-bit floats, as a cryptic curvilinear
+file would hold them:
+
+| Candidate frame | Median step (m) | Worst step deviation | Worst row spread in y |
+|---|---|---|---|
+| EPSG:3412 (the true frame) | 25000.00 | 1.2 m (0.005%) | 0.23 m |
+| EPSG:3031 (WGS84 polar stereographic, true scale at 71 S) | 25074.50 | 1.2 m (0.005%) | 0.25 m |
+| Lambert azimuthal equal area, south pole | 24352.17 | 2951 m (12%) | 53.8 km |
+
+: Regularity of one stored grid in three candidate frames. Numbers from `scripts/make_figures.py`. {#tbl-candidates}
+
+Three things to notice.
+
+1. **The gap is enormous.** In the right family the deviation is a few
+   thousandths of a percent; in the wrong one it is 12%. Genuinely
+   curvilinear grids deviate by tens of percent. False positives are not a
+   practical risk.
+2. **The test finds a family, not a unique CRS.** EPSG:3031 passes as well
+   as the true frame, with a slightly different step. Both are polar
+   stereographic with the pole at the centre; they differ in the latitude of
+   true scale and the ellipsoid, and both of those only rescale the grid. The
+   CORDEX work found the same thing: the fit can tell a sphere from an
+   ellipsoid (a residual floor of about a kilometre versus under a metre) but
+   not WGS84 from Hughes 1980, and it cannot recover the latitude of true
+   scale from longitude and latitude alone. Report the family, then choose the
+   member whose step comes out as a round number, and say that you chose.
+3. **The centre meridian has to be fitted.** At a pole the spherical centroid
+   gives the centre latitude, but every meridian passes through it. Fit
+   `lon_0` by making rows horizontal.
+
+The gproj package (github.com/mdsumner/gproj) implements these steps,
+including a first check for a Mercator grid stored as longitude and latitude
+(@fig-mercator) and a characterisation of the coordinates that suggests
+candidate families.
+
+## Recovering the grid
+
+Once a frame passes, the grid is the frame plus six numbers:
+
+1. Snap the step to the nearest round value (25000 rather than 24999.7).
+2. Recover the extent from the outermost cell centres plus half a cell.
+3. Snap the extent to whole multiples of the step.
+
+For the CryoSat-2 file this gave an extent within 33 m of the published
+NSIDC values before snapping, and exactly the published values after.
+
+Then attach it. Each of these makes the data regular again, without
+resampling (more in @sec-recipes):
+
+```bash
+# GDAL: assign extent and CRS through a vrt:// connection string
+gdalinfo "vrt://file.nc?sd_name=VARIABLE&a_srs=EPSG:3412&a_ullr=-3950000,4350000,3950000,-3950000"
+```
+
+```r
+library(terra)
+r <- rast("file.nc", subds = "VARIABLE")
+ext(r) <- c(-3950000, 3950000, -3950000, 4350000)
+crs(r) <- "EPSG:3412"
+```
+
+```python
+import rioxarray  # registers the .rio accessor
+from affine import Affine
+da = da.rio.write_transform(Affine(25000, 0, -3950000, 0, -25000, 4350000))
+da = da.rio.write_crs("EPSG:3412")
+```
+
+## When it really is curvilinear
+
+If no frame makes the coordinates regular, keep them. That is case H, and
+the 2D arrays are the grid. Work with tools that respect that (xESMF,
+pyresample, GDAL's warper with geolocation arrays, stars), and choose
+regridding methods deliberately. For swaths, a frame can still help: an
+oblique Mercator aligned with the ground track straightens a swath into a
+narrow strip, which makes it far easier to subset and plot even though it
+does not make it regular.
+
+## For data producers
+
+- If the grid is regular in some frame, store that frame (`grid_mapping`
+  with CF parameter names, plus `crs_wkt`) and 1D axes in it. That is
+  enough for every reader.
+- Add 2D longitude and latitude only as a convenience alongside, and say so.
+- Spell the `grid_mapping` reference with the mapping variable's actual
+  name, and include `grid_mapping_name` and its required parameters. An
+  `authority` attribute is not CF and readers ignore it.
+- Use 64-bit coordinates, or better, coordinates that are exactly
+  representable.
+
+## For data consumers
+
+- Ask "regular in what?" before "is it curvilinear?".
+- Read native axes where they exist; do not reproject coordinates to
+  recover a grid that is already on disk.
+- Test with a relative tolerance and wrapped angular differences.
+- When a CRS is recovered rather than read, say so, and say which choices
+  (family member, latitude of true scale) were made rather than found.

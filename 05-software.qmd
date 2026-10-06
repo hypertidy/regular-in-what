@@ -1,0 +1,137 @@
+# What the software does {#sec-software}
+
+The communities in @sec-communities wrote the software everyone now shares.
+This chapter looks at what the main readers do with the two questions. The
+claims about specific behaviour come from working through real files
+(mostly the CORDEX and GOES cases in @sec-cases) and are worth re-checking
+against current versions.
+
+## GDAL has two models
+
+GDAL is the common engine under terra, rasterio, rioxarray, stars, sf,
+gdalraster, vapour and QGIS, so its choices propagate. It has two separate
+data models, and they behave differently on exactly the grids this book is
+about.
+
+### The classic raster model
+
+The classic model is a 2D raster with a six-number geotransform and a CRS,
+plus optional metadata for geolocation arrays, ground control points or
+rational polynomial coefficients. When the classic netCDF driver opens a
+variable it tries to reduce the coordinates to a geotransform:
+
+- If it finds 1D coordinate variables that are evenly spaced within its
+  tolerance, it builds a geotransform from them. Case C becomes case B. This
+  is the "degenerate rectilinear" case handled well.
+- If the coordinates are 2D, it reports them as a geolocation array (the
+  `GEOLOCATION` metadata domain, pointing at `X_DATASET` and `Y_DATASET`).
+  The data gets pixel and line coordinates only. The warper can use the
+  geolocation arrays to resample onto any target grid.
+- It reads the CRS from the CF `grid_mapping`. If the reference is broken it
+  silently drops the CRS; a geotransform with no CRS is the result.
+
+Two consequences matter here. First, the classic model cannot distinguish
+cryptic curvilinear (case E) from truly curvilinear (case H): both are
+geolocation arrays, and the warper will resample both. Second, it checks
+axis names. For a rotated-pole file with `rlon` and `rlat` axes
+(`standard_name` of `grid_longitude` and `grid_latitude`) the classic
+driver rejects them as x and y and falls back to the 2D geographic arrays,
+even though the regular rotated axes are on disk. Two configuration options
+change that:
+
+```bash
+gdalinfo --config GDAL_NETCDF_VERIFY_DIMS STRICT \
+         --config GDAL_NETCDF_IGNORE_XY_AXIS_NAME_CHECKS YES \
+         NETCDF:"file.nc":tas
+```
+
+With both set, GDAL builds the rotated affine grid correctly, though in the
+version tested it still printed the warning that `rlon` is not an x
+dimension.
+
+### The multidimensional model
+
+GDAL's multidimensional API (`gdal mdim info`, `GDALMDArray`) is
+dimension-native. Arrays have named dimensions, coordinate variables are
+attached to dimensions, and the CRS is attached to the array. There is no
+geotransform-or-geolocation fork to fall into, because the model never
+flattens to a 2D six-number raster unless asked to. When it is asked, through
+`AsClassicDataset()`, it does the inference itself: it tests the indexing
+variables for regular spacing, collapses them to a geotransform when they
+pass, synthesises the CRS from CF attributes, and falls back to geolocation
+only when the coordinates are not reducible.
+
+On the rotated-pole file, the multidimensional path reads `(time, rlat,
+rlon)` with the rotated CRS and needs no configuration at all.
+
+The C++ class has `IsRegularlySpaced()` and `GuessGeoTransform()` methods,
+which are exactly the regularity test and recovery step this book keeps
+asking for. As of early 2026 they were not exposed through the C API or the
+Python and R bindings, so callers outside C++ had to read coordinate arrays
+and test them in user code.
+
+## One file, four readers
+
+The RACMO rotated-pole file from the CORDEX Antarctic domain was read four
+ways:
+
+| Reader | Result |
+|---|---|
+| GDAL multidimensional (`gdal mdim info`) | correct with no options: `(time, rlat, rlon)`, rotated CRS on the array |
+| terra, `rast(f, md = TRUE)` | correct: reads `rlon` and `rlat` through the multidimensional path |
+| xarray through GDAL's multidimensional backend | correct, same path |
+| GDAL classic raster | geolocation arrays by default; needs `STRICT` and `IGNORE_XY_AXIS_NAME_CHECKS`, with a contradictory warning |
+
+: Reading a regular rotated-pole grid. {#tbl-four-readers}
+
+The lesson is architectural. The abstraction that keeps dimensions and
+coordinates as first-class objects reads this grid correctly; the one that
+flattens everything to a 2D affine raster has to be coerced back into
+correctness, and the rotated frame is where the flattening leaks.
+
+## R
+
+- **terra** holds regular grids only: a SpatRaster is a dimension, an extent
+  and a CRS. Rectilinear and curvilinear data must be warped onto a regular
+  grid or read through GDAL's multidimensional path with `md = TRUE`. Fixing
+  a cryptic curvilinear file in terra means assigning the extent and CRS.
+- **stars** has explicit dimension types for regular, rectilinear and
+  curvilinear grids, so it can represent all three rungs of the ladder.
+  Whether a grid is labelled curvilinear depends on what was stored, so case
+  E comes in as curvilinear unless the user supplies the native frame.
+- **vapour**, **gdalraster** and **vaster** expose GDAL more directly.
+  vaster is grid arithmetic alone: given a dimension and extent, it computes
+  cells, rows, columns, centres and crops with no data attached.
+- **Base graphics** split the ladder across `image()` (coordinate vectors,
+  edges or centres) and `rasterImage()` (a bounding box).
+
+## Python
+
+- **rasterio** is GDAL's classic model in Python: an `Affine` transform and
+  a CRS.
+- **xarray** stores coordinates as arrays and leaves interpretation to other
+  layers. **cf_xarray** reads CF semantics, **rioxarray** attaches a CRS and
+  a transform for regular grids, **xESMF** regrids curvilinear grids using
+  their 2D coordinates, **pyresample** handles swaths. Since xarray's 2025
+  index work, **rasterix** can hold a regular grid as an affine
+  `RasterIndex` instead of materialised coordinates.
+- **matplotlib** and **cartopy** draw regular grids with `imshow()` and an
+  extent, and rectilinear or curvilinear grids with `pcolormesh()`.
+
+## What none of them do by default
+
+No widely used reader, in either language, takes 2D longitude and latitude
+arrays and asks whether they are regular in some other frame. That test is
+cheap (@sec-field-guide) and its answer is often yes, but it is left to the
+user. Until readers do it, the label a grid receives is decided by whatever
+its producer happened to store.
+
+Two small changes in GDAL would remove a lot of silent failure, and are
+worth raising upstream:
+
+- warn when a `grid_mapping` attribute names a variable that does not exist,
+  and when a recognised `grid_mapping_name` is missing required parameters
+  (the current behaviour can produce a wrong CRS, which is worse than none);
+- accept `grid_longitude` and `grid_latitude` with a
+  `rotated_latitude_longitude` mapping as x and y by default, since the
+  escape hatch already exists.

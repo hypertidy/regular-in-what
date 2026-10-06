@@ -1,0 +1,46 @@
+# References {#sec-references}
+
+## Standards and taxonomies
+
+- Balaji, V. (2006). *A standard description of grids used in Earth system
+  models.* GFDL/NOAA. The "logically rectangular" and mosaic framework.
+  https://extranet.gfdl.noaa.gov/~vb/gridstd/
+- ESMF Reference Manual, grid section: uniform, rectilinear and curvilinear
+  as subtypes of logically rectangular. https://earthsystemmodeling.org
+- CF Conventions, section 5 (coordinate systems) and the grid mapping
+  appendix. https://cfconventions.org
+- Weinkauf, T. (KTH, 2015). *Grids and interpolation* (lecture notes): the
+  implicit, semi-implicit and explicit storage framing.
+- Campbell, J. W., Blaisdell, J. M. and Darzi, M. (1995). *Level-3 SeaWiFS
+  data products: spatial and temporal binning algorithms.* NASA Technical
+  Memorandum 104566, Vol. 32.
+- NASA OBPG. *Integerized Sinusoidal Binning Scheme for Level 3 Data.*
+  https://oceancolor.gsfc.nasa.gov/resources/docs/format/l3bins/
+  (archived copy: https://web.archive.org/web/20260106075308/https://oceancolor.gsfc.nasa.gov/resources/docs/format/l3bins/)
+- GeoTIFF specification: tiepoints, pixel scale, PixelIsArea and
+  PixelIsPoint.
+
+## Source writing consolidated here
+
+- Sumner, M. (2026). Grids: regular, rectilinear, curvilinear. hypertidy.org.
+- Sumner, M. (2026). Detecting hidden grids in curvilinear coordinates.
+  hypertidy.org.
+- Sumner, M. (2025). Coordinates broken in NetCDF. hypertidy.org.
+- Sumner, M. (2025). Raster logic without pixels. hypertidy.org.
+- Sumner, M. (2022). Degenerate rectilinear (WIP). hypertidy.org.
+- gdal-r-python: `multidim/rotated_pole_cordex_netcdf.md`,
+  `georef-tiepoint/raster-coordinate.md`,
+  `multidim/gdal-multidim-notes-2026-02-16.md`,
+  `xarray-r-design-analysis.md`. github.com/mdsumner/gdal-r-python
+- rw-book (2024) and a-book (2026) drafts. github.com/dis-organization/rw-book,
+  github.com/mdsumner/a-book
+- hypertidy/L3bin: the L3 bin scheme in R. github.com/hypertidy/L3bin
+- trianglewins: On dimension (2026). github.com/mdsumner/trianglewins
+
+## Data
+
+- CryoSat-2 sea ice, `CS2WFA_25km_201007.nc`, Zenodo record 7327711.
+- CORDEX ANT-12, RACMO24P-NN daily `tas`, via cordex.dmi.dk THREDDS.
+- MUR GHRSST L4 v4.1, PO.DAAC.
+- GOES-16 ABI-L2-MCMIPF, NOAA and the Earthmover icechunk store
+  `earthmover-public/goes-16`.

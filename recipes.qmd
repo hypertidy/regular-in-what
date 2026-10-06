@@ -1,0 +1,94 @@
+# Recipes {#sec-recipes}
+
+Small, copyable procedures referred to in the chapters. Variable and file
+names are placeholders.
+
+## See what a file declares
+
+```bash
+ncdump -h file.nc                                  # attributes, grid_mapping, standard_name
+gdalinfo NETCDF:"file.nc":VARIABLE                 # classic model: geotransform or GEOLOCATION
+gdal mdim info file.nc                             # multidimensional model (GDAL 3.11+ CLI)
+```
+
+```python
+import xarray as xr
+ds = xr.open_dataset("file.nc")
+print(ds["VARIABLE"].attrs.get("grid_mapping"), ds["VARIABLE"].attrs.get("coordinates"))
+print({k: v.dims for k, v in ds.coords.items()})   # 1D or 2D coordinates?
+```
+
+## Assign a regular grid without resampling
+
+GDAL, as a connection string usable anywhere GDAL opens data:
+
+```
+vrt://file.nc?sd_name=VARIABLE&a_srs=EPSG:3412&a_ullr=-3950000,4350000,3950000,-3950000
+```
+
+`a_ullr` is upper-left x, upper-left y, lower-right x, lower-right y.
+`a_gt` assigns a full geotransform instead. `sd_name` needs GDAL 3.9 or
+later.
+
+R (terra):
+
+```r
+library(terra)
+r <- rast("file.nc", subds = "VARIABLE")
+ext(r) <- c(-3950000, 3950000, -3950000, 4350000)   # xmin, xmax, ymin, ymax
+crs(r) <- "EPSG:3412"
+```
+
+Python (rioxarray):
+
+```python
+import rioxarray
+from affine import Affine
+da = da.rio.write_transform(Affine(25000, 0, -3950000, 0, -25000, 4350000))
+da = da.rio.write_crs("EPSG:3412")
+```
+
+## Read a rotated-pole file as a regular grid
+
+```bash
+gdal mdim info file.nc                             # works as is
+gdalinfo --config GDAL_NETCDF_VERIFY_DIMS STRICT \
+         --config GDAL_NETCDF_IGNORE_XY_AXIS_NAME_CHECKS YES \
+         NETCDF:"file.nc":tas                      # classic model
+```
+
+```r
+terra::rast("file.nc", md = TRUE)
+```
+
+## Repair a broken CF grid mapping (MAR example)
+
+Work on a copy. With RNetCDF:
+
+```r
+library(RNetCDF)
+nc <- open.nc("copy.nc", write = TRUE)
+att.put.nc(nc, "tas", "grid_mapping", "NC_CHAR", "stereographic")   # name the real variable
+att.put.nc(nc, "stereographic", "grid_mapping_name", "NC_CHAR", "polar_stereographic")
+att.put.nc(nc, "stereographic", "latitude_of_projection_origin", "NC_DOUBLE", -90)
+att.put.nc(nc, "stereographic", "straight_vertical_longitude_from_pole", "NC_DOUBLE", 20)
+att.put.nc(nc, "stereographic", "standard_parallel", "NC_DOUBLE", -71)
+close.nc(nc)
+```
+
+Keep `semi_major_axis` and `inverse_flattening`; delete the non-CF names
+(`central_meridian`, `latitude_of_origin`, `authority`). GDAL then built
+`+proj=stere +lat_0=-90 +lat_ts=-71 +lon_0=20 +a=6378137 +rf=298.2572`.
+
+## Make a minimal reproducible example
+
+Use NCO, which copies faithfully. CDO regenerates the grid and can erase the
+very bug being reported.
+
+```bash
+ncks -h -3 -O -C -v tas,stereographic,x,y,time -d time,0 -d x,0,,40 -d y,0,,40 in.nc step1.nc
+ncatted -h -O -a ,global,d,, -a Conventions,global,c,c,"CF-1.6" step1.nc reprex.nc
+```
+
+`-3` writes classic netCDF, avoiding HDF5 container overhead; `-h` on both
+commands keeps the history attribute from leaking the original file name.

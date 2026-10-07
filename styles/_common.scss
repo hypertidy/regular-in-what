@@ -1,0 +1,162 @@
+// Shared rules for light and dark themes (mirrors the review page styling).
+// Survey-sheet look: condensed sans headings, serif body, mono labels.
+
+/*-- scss:rules --*/
+
+body {
+  font-size: 1.075rem;
+  line-height: 1.6;
+}
+
+h1, h2, h3, h4, .title, .quarto-title .subtitle {
+  font-family: $headings-font-family;
+  line-height: 1.15;
+  text-wrap: balance;
+}
+
+// Title block drawn on a graticule, like the masthead of the review page.
+#title-block-header.quarto-title-block {
+  background-image:
+    linear-gradient($grid-line 1px, transparent 1px),
+    linear-gradient(90deg, $grid-line 1px, transparent 1px);
+  background-size: 28px 28px;
+  background-position: -1px -1px;
+  border-bottom: 1px solid $rule-color;
+  padding: 2rem 0 1.5rem;
+  margin-bottom: 2rem;
+}
+#title-block-header .quarto-title {
+  background: $body-bg;
+  display: inline-block;
+  border: 1px solid $rule-color;
+  padding: 1rem 1.25rem 1.1rem;
+  max-width: 100%;
+}
+#title-block-header h1.title {
+  font-weight: 700;
+  font-size: clamp(2rem, 5vw, 3rem);
+  line-height: 1.05;
+  letter-spacing: -0.01em;
+  margin: 0;
+}
+#title-block-header .quarto-title-meta {
+  font-family: $font-family-monospace;
+  font-size: 0.8rem;
+  color: $muted-color;
+}
+
+main h2 {
+  font-weight: 600;
+  border-bottom: none;
+  margin-top: 2.2rem;
+}
+main h3 { font-weight: 600; }
+
+.header-section-number,
+.chapter-number {
+  font-family: $font-family-monospace;
+  font-weight: 500;
+  color: $mark-color;
+}
+h2 .header-section-number,
+h3 .header-section-number { font-size: 0.7em; margin-right: 0.5em; vertical-align: 0.1em; }
+
+main p, main li { max-width: 65ch; }
+
+strong { font-weight: 600; }
+
+blockquote {
+  margin: 1.5rem 0;
+  padding: 0.9rem 1.2rem;
+  border-left: 4px solid $mark-color;
+  background: $sheet-color;
+  font-size: 1.15rem;
+  color: $body-color;
+  p { margin: 0; }
+}
+
+code {
+  font-size: 0.86em;
+}
+p code:not(.sourceCode), li code:not(.sourceCode), td code:not(.sourceCode) {
+  background: $code-bg;
+  color: $body-color;
+  padding: 0.08em 0.3em;
+  border-radius: 3px;
+}
+div.sourceCode, pre.sourceCode, pre {
+  background: $code-bg;
+  border: none;
+  border-radius: 4px;
+}
+
+// Tables: rule above and below, condensed sans, tabular figures.
+table, .table {
+  font-family: $headings-font-family;
+  font-size: 0.9rem;
+  font-variant-numeric: tabular-nums;
+  border-top: 1px solid $body-color;
+  border-bottom: 1px solid $body-color;
+}
+.table > :not(caption) > * > * {
+  padding: 0.45rem 0.6rem;
+  border-bottom-color: $rule-color;
+}
+.table thead th, table th {
+  font-weight: 600;
+  background: $sheet-color;
+  border-bottom: 1px solid $rule-color;
+}
+caption, .table-caption, .quarto-float-caption-top {
+  caption-side: top;
+  text-align: left;
+  font-family: $font-family-monospace;
+  font-size: 0.78rem;
+  color: $muted-color;
+}
+
+// Figures: framed on white so the PNGs read in both themes.
+.quarto-figure img, figure img {
+  background: #ffffff;
+  padding: 0.6rem;
+  border: 1px solid $rule-color;
+}
+figcaption, .figure-caption {
+  font-size: 0.92rem;
+  color: $muted-color;
+  line-height: 1.45;
+}
+.quarto-figure-center > figure { text-align: left; }
+
+// Sidebar and table of contents in the display face.
+.sidebar, #TOC, #quarto-margin-sidebar {
+  font-family: $headings-font-family;
+}
+.sidebar nav[role="doc-toc"] .toc-actions,
+#TOC > h2, .sidebar-section .sidebar-item-text.text-start {
+  font-family: $headings-font-family;
+}
+#toc-title, .toc-actions, .sidebar-title {
+  font-family: $font-family-monospace;
+  font-size: 0.75rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: $muted-color;
+}
+.sidebar-title { font-size: 0.85rem; }
+.sidebar-item-section > .sidebar-item-container .sidebar-item-text {
+  font-weight: 600;
+}
+
+// Overrides for Bootstrap/Quarto defaults that the rules above lose to.
+blockquote.blockquote,
+blockquote.blockquote p,
+blockquote.blockquote strong {
+  color: $body-color;
+}
+.table > :not(caption) > * > th,
+.table > :not(caption) > * > td,
+table th, table td {
+  text-align: left !important;
+  vertical-align: top;
+}

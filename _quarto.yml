@@ -30,7 +30,11 @@ book:
 
 format:
   html:
-    theme: cosmo
+    theme:
+      light: [cosmo, styles/light.scss, styles/_common.scss]
+      dark: [cosmo, styles/dark.scss, styles/_common.scss]
+    respect-user-color-scheme: true
+    highlight-style: a11y
     toc: true
     number-sections: true
     code-copy: true

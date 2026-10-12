@@ -7,8 +7,7 @@ People say a grid is "curvilinear" when they mean several different things:
 that its coordinates are stored as two-dimensional longitude and latitude
 arrays, that it is in geographic coordinates at all, or that its cells
 really do follow curved lines that no simple formula can describe. Those
-are different claims. Treating them as one leads to files that are
-hundreds of thousands of times larger than they need to be, to coordinates
+are different claims. Treating them as one leads to files that are larger than they need to be, to coordinates
 that are less precise than the numbers they replaced, to software that
 refuses a perfectly regular grid, and to analysis that resamples data that
 never needed resampling.

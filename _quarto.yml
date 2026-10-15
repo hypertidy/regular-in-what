@@ -25,6 +25,7 @@ book:
         - 08-edges.qmd
   appendices:
     - glossary.qmd
+    - misreadings.qmd
     - recipes.qmd
     - references.qmd
 

@@ -58,6 +58,10 @@ it tries to explain each one in its own terms before comparing them.
 - Part III (chapters 6 to 8) is for working with real files: a field guide,
   worked cases, and where the whole framework stops applying.
 
+If you arrived with an objection, such as "Wikipedia already defines a
+regular grid", @sec-misreadings collects the common ones with short
+answers.
+
 Code is shown in R and Python, and in GDAL command line form where that is
 simplest. It is not run when the book is built. The figures are built from
 published grid specifications by `scripts/make_figures.py`, and the numbers

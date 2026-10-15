@@ -1,0 +1,100 @@
+# Misreadings {#sec-misreadings}
+
+The book makes one claim: grid type is relative to a frame. Some readings
+of it miss that claim, and some readers reach past the book for an
+authority that seems to settle the matter first. This appendix collects
+those responses as they turn up, with a short answer to each. It will grow.
+
+## "Wikipedia already defines a regular grid" {#sec-mis-wikipedia}
+
+It does, and its definitions agree with this book. They just leave the
+frame unstated, because they assume one.
+
+The Wikipedia article *Regular grid* (read 15 October 2026) defines a
+regular grid as a tessellation of *n*-dimensional Euclidean space by
+congruent parallelotopes. A rectilinear grid is a tessellation by rectangles
+or boxes that are not all congruent. A curvilinear grid has the same
+combinatorial structure as a regular grid but quadrilateral cells instead
+of rectangles. Every one of these is a statement about the shape of cells
+*in a space*, and the space is fixed in advance: Euclidean, with Cartesian
+coordinates. The article never mentions geographic coordinates, map
+projections or coordinate reference systems.
+
+Earth data does not come with a single Euclidean space. Longitude and
+latitude are not Euclidean coordinates, and each map projection supplies a
+different plane. Applied to Earth data, the article's definitions give
+different answers depending on which plane you draw the cells in. The
+NSIDC 25 km grid is a tessellation by congruent squares in EPSG:3412, which
+makes it regular by Wikipedia's definition. Drawn in longitude and latitude,
+the same cells are general quadrilaterals, which makes it curvilinear by the
+same article's definition (@sec-case-cryosat). Wikipedia does not decide
+between those answers. It cannot, because it never asks which plane.
+
+The article's own example of a rectilinear grid makes the point. Its
+example is logarithmic graph paper. The lines on log paper are unevenly
+spaced in *x* and evenly spaced in log(*x*), so the paper is rectilinear in
+one frame and regular in another. That is the claim of this book, in the
+article's own example.
+
+**Better authorities.** The article has two references: a MathWorld entry
+and Thompson, Soni and Weatherill's *Handbook of Grid Generation*. The
+grid-generation literature the handbook represents defines a structured
+grid as a mapping. The grid is uniform in a computational (index) space,
+and a coordinate transformation carries it into the physical space where it
+may be curvilinear. Grid type is a property of that mapping and the space it
+lands in, not of the cells alone. The sources this book already relies on
+take the same view:
+
+- Balaji's grid standard calls the first three rungs *logically
+  rectangular*: "The coordinate space may continue to be physically
+  curvilinear; yet, in index space, grid cells will be rectilinear boxes."
+  (@sec-two-questions)
+- ESMF classifies uniform, rectilinear and curvilinear grids as subtypes of
+  logically rectangular grids, with the coordinates stored separately from
+  the index structure.
+- The CF conventions let one dataset carry native 1D projected or rotated
+  coordinates alongside 2D longitude and latitude, tied together by a
+  `grid_mapping` variable. CF thereby records that one grid can be 1D and
+  regular in one frame and 2D in another (@sec-case-cordex).
+
+So the disagreement is not with Wikipedia. It is with reading a definition
+written for one Euclidean space as if it settled a question about
+several frames.
+
+## "This is just arguing about words"
+
+The words matter because software and file formats act on them. Treating a
+regular grid as curvilinear makes files many thousands of times larger than
+they need to be (@sec-costumes). It also replaces exact coordinates with
+float32 noise, makes readers refuse or warp grids that need nothing done
+(@sec-software), and leads to resampling data that was already on a regular
+grid (@sec-problem). None of those costs depends on vocabulary. They all
+follow from not asking which frame.
+
+## "So 2D longitude and latitude arrays are wrong"
+
+No. For a genuinely curvilinear grid, such as the NEMO ORCA tripolar grid
+(@sec-case-orca) or a satellite swath (@sec-case-viirs), the arrays *are*
+the grid, and nothing smaller describes it. Storing longitude and latitude
+next to a regular grid's native coordinates is also fine, and CF encourages
+it. The trouble starts when the 2D arrays are the only thing stored and the
+frame that made the grid regular is lost.
+
+## "A longitude and latitude grid is curvilinear because the Earth is curved"
+
+A grid with uniform steps in longitude and latitude is regular in the
+longitude and latitude frame. Its cells shrink toward the poles on the
+ground, and its lines are curves when drawn in most projections, but that is
+the frame doing its work, not the grid changing type. The curvature of the
+Earth is a separate question about the surface the frame sits on. That
+question is about wrapping, poles and area, and @sec-edges takes it up.
+
+## "Regular means the cells are all the same size"
+
+Only in the frame. A regular longitude and latitude grid has cells whose
+ground area varies with the cosine of latitude, so a 1 degree cell at 80
+degrees covers less than a fifth of the area of one at the equator. In the
+other direction, NASA's L3 bin scheme has cells of nearly equal area and is
+not regular in any frame; it is not even indexed by row and column
+(@sec-l3bin). Equal area is a property of cells on the Earth. Regularity is
+a property of positions in a frame.

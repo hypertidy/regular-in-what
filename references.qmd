@@ -17,6 +17,11 @@
 - NASA OBPG. *Integerized Sinusoidal Binning Scheme for Level 3 Data.*
   https://oceancolor.gsfc.nasa.gov/resources/docs/format/l3bins/
   (archived copy: https://web.archive.org/web/20260106075308/https://oceancolor.gsfc.nasa.gov/resources/docs/format/l3bins/)
+- Thompson, J. F., Soni, B. K. and Weatherill, N. P. (eds) (1998).
+  *Handbook of Grid Generation.* CRC Press. Structured grids as a mapping
+  from a uniform computational space to physical space.
+- Wikipedia. *Regular grid.* https://en.wikipedia.org/wiki/Regular_grid
+  (read 15 October 2026). Discussed in @sec-mis-wikipedia.
 - GeoTIFF specification: tiepoints, pixel scale, PixelIsArea and
   PixelIsPoint.
 

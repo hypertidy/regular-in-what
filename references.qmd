@@ -22,6 +22,15 @@
   from a uniform computational space to physical space.
 - Wikipedia. *Regular grid.* https://en.wikipedia.org/wiki/Regular_grid
   (read 15 October 2026). Discussed in @sec-mis-wikipedia.
+- SGRID conventions: describing staggered structured grids.
+  https://sgrid.github.io/sgrid/
+- Calabretta, M. R. and Greisen, E. W. (2002). Representations of
+  celestial coordinates in FITS. *Astronomy and Astrophysics* 395,
+  1077-1122. The FITS World Coordinate System.
+- Shupe, D. L. et al. (2005). The SIP convention for representing
+  distortion in FITS image headers. ASP Conference Series 347.
+- OME-Zarr (OME-NGFF) specification: `coordinateTransformations`.
+  https://ngff.openmicroscopy.org
 - GeoTIFF specification: tiepoints, pixel scale, PixelIsArea and
   PixelIsPoint.
 

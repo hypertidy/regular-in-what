@@ -139,6 +139,39 @@ rectilinear or curvilinear. They answer question one by their argument
 types, ignore question two, and are a common source of the half-pixel
 confusion between edges and centres.
 
+## Further afield: imaging
+
+Microscopy and astronomy have the same problem, and each has made its own
+choice about it.
+
+A camera or detector produces a regular grid of pixels. That grid is exactly
+regular in sensor coordinates. In the frame anyone cares about (positions
+in the specimen, or on the sky) it is regular only if the optics are
+perfect. Lens distortion bends straight rows of pixels into curves in the
+specimen, so the image is regular in one frame and curvilinear in another:
+a cryptic curvilinear grid made by a lens instead of a projection.
+
+**Astronomy** keeps the mapping rather than the coordinates. A FITS image
+carries a World Coordinate System header: a reference pixel, a reference
+sky position, a scale and rotation matrix, and a named projection (`TAN`
+for a gnomonic projection, among many). Optical distortion is added as a
+polynomial correction, for example the SIP convention. Per-pixel sky
+coordinates are almost never stored. This is the grid-generation view in
+@sec-mis-wikipedia: a regular index space, plus a stated transformation
+into the frame of interest.
+
+**Microscopy** formats such as OME-Zarr record a scale and translation per
+axis, which is a regular grid in the specimen frame. Distortion and
+registration between images need more than that, and the choice is the one
+this book keeps returning to: resample the image onto a regular grid in the
+frame you want, or keep the native pixels and carry the transform (affine,
+or a displacement field) alongside. Proposals to add such transforms to
+OME-Zarr are under way.
+
+Neither community calls any of this "curvilinear", which is a useful
+reminder that the problem is not the word. It is whether the frame and the
+transform travel with the data.
+
 ## Side by side
 
 | Community | Default unit of truth | Question one comes from | Question two comes from | Typical blind spot |

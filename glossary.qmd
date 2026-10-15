@@ -32,6 +32,10 @@ and curvilinear (Balaji).
 **Cryptic curvilinear.** A grid stored as 2D coordinate arrays that is
 regular in some other frame.
 
+**Staggered grid.** A grid whose variables sit at different places on
+each cell (centres, faces, corners), as on an Arakawa C-grid. Each location
+has its own positions; SGRID describes how they relate.
+
 **Geolocation array.** GDAL's term for per-pixel coordinate arrays. Covers
 cryptic curvilinear grids, model grids and sensor swaths alike.
 

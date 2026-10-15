@@ -136,6 +136,21 @@ the two questions, and mixing them in makes the picture harder to see.
 
 ![Three equivalent descriptions of one small regular grid: edge coordinates (n + 1 per axis), centre coordinates (n per axis), or extent and dimension.](figures/centre-edge.png){#fig-centre-edge width=60%}
 
+Ocean and atmosphere models take this further with **staggered grids**.
+On an Arakawa C-grid, for example, scalars such as temperature sit at
+cell centres, the east-west velocity on the east and west faces, and the
+north-south velocity on the north and south faces. Each variable has its
+own set of positions, offset from the others by half a cell. In a frame
+where the grid is regular that offset is just a shifted origin, still six
+numbers per location. Stored as 2D longitude and latitude, it becomes a
+full pair of arrays per location: ROMS writes `lon_rho`, `lon_u`, `lon_v`
+and `lon_psi`, and NEMO writes `glamt`, `glamu`, `glamv` and `glamf`, each
+with its latitude twin. The SGRID convention describes how those
+locations relate (which dimensions are faces, which are nodes, and the
+padding between them), much as UGRID does for meshes. It is not part of
+CF. Staggering answers "where on the cell?", which is a different question
+from the two in this chapter.
+
 - **Numeric precision.** Coordinates stored as 32-bit floats carry noise.
   Whether a grid is "regular" is always a question with a tolerance.
 - **The shape of the Earth.** The ladder is deliberately silent about the

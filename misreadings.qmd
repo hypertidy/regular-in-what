@@ -61,15 +61,42 @@ So the disagreement is not with Wikipedia. It is with reading a definition
 written for one Euclidean space as if it settled a question about
 several frames.
 
-## "This is just arguing about words"
+## "Projected data is flat, longitude and latitude need the ellipsoid" {#sec-mis-flat}
 
-The words matter because software and file formats act on them. Treating a
-regular grid as curvilinear makes files many thousands of times larger than
-they need to be (@sec-costumes). It also replaces exact coordinates with
-float32 noise, makes readers refuse or warp grids that need nothing done
-(@sec-software), and leads to resampling data that was already on a regular
-grid (@sec-problem). None of those costs depends on vocabulary. They all
-follow from not asking which frame.
+A common rule of thumb splits data in two. Longitude and latitude are
+angles, so distances and areas need spherical or ellipsoidal methods.
+Projected data is in metres, so planar measures are fine. The rule
+is fine as a warning about angles, but it draws the line in the wrong
+place.
+
+Every projected coordinate is a position on the ellipsoid. The
+projection only changes how it is written down, and each projection
+stretches the surface by a different amount in different places. Planar
+measures on projected coordinates are only as good as the projection's
+scale factor where you measure. In EPSG:3412, the NSIDC south polar
+stereographic frame, the scale is true at 70 S. A 25 km map cell
+covers about 665 square km on the ground at the pole and about 520 at
+50 S, where the areal scale factor is 1.21. That is a 21 percent error from
+a regular grid in metres. World Mercator (EPSG:3395) overstates area by a
+factor of 4 at 60 degrees. Even UTM, which is built to keep distortion small,
+is off in area by 0.5 percent six degrees from its central meridian and by
+2.4 percent at twelve degrees, which is what happens when one zone is
+stretched to cover a whole region. An equal-area frame such as EASE-Grid 2.0
+(EPSG:6933) gets area exactly right everywhere, and in exchange it distorts
+distance by a factor of 1.7 along the parallel at 60 N.
+
+The other half of the rule is backwards for regular grids. A grid that is
+regular in longitude and latitude has cells bounded by meridians and
+parallels, and the area of such a cell has a closed form:
+`R^2 * dlon * (sin(lat2) - sin(lat1))` on the sphere, with an equivalent
+closed form on the ellipsoid. One number per row covers the whole grid, and
+it is exact. Ellipsoidal methods sound like an extra burden, but here they
+are the simple case.
+
+So the useful question is not "is it projected?" but "what does this frame
+preserve, and where?". That is the same kind of question as "regular in
+what?". Whether a grid is regular depends on the frame, and so does whether a
+planar measure means anything on the ground.
 
 ## "So 2D longitude and latitude arrays are wrong"
 

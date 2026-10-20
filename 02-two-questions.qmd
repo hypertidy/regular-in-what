@@ -138,8 +138,13 @@ the two questions, and mixing them in makes the picture harder to see.
 
 Ocean and atmosphere models take this further with **staggered grids**.
 On an Arakawa C-grid, for example, scalars such as temperature sit at
-cell centres, the east-west velocity on the east and west faces, and the
-north-south velocity on the north and south faces. Each variable has its
+cell centres, the `i`-direction velocity on the two faces crossed by the
+`i` axis, and the `j`-direction velocity on the two faces crossed by the
+`j` axis. Each velocity is normal to its face, so it points along the
+grid's own axes; those are east and north only when the grid lines follow
+meridians and parallels, as in a longitude and latitude or Mercator grid.
+On a rotated, projected or curvilinear grid they are not, and the next
+paragraph comes back to what that means. Each variable has its
 own set of positions, offset from the others by half a cell. In a frame
 where the grid is regular that offset is just a shifted origin, still six
 numbers per location. Stored as 2D longitude and latitude, it becomes a

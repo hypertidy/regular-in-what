@@ -55,7 +55,9 @@
 - rw-book (2024) and a-book (2026) drafts. github.com/dis-organization/rw-book,
   github.com/mdsumner/a-book
 - hypertidy/L3bin: the L3 bin scheme in R. github.com/hypertidy/L3bin
-- trianglewins: On dimension (2026). github.com/mdsumner/trianglewins
+- trianglewins: Notes (dimension and interpolation) and Grids as meshes
+  (2026). github.com/mdsumner/trianglewins, survey/notes.md and
+  survey/grids.md
 
 ## Data
 

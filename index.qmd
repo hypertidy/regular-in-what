@@ -71,5 +71,5 @@ quoted alongside them come from that script.
 
 The material here was consolidated from blog posts on hypertidy.org
 (2022 to 2026), working notes in the gdal-r-python repository, two earlier
-book drafts (rw-book and a-book), the trianglewins note "On dimension", and
+book drafts (rw-book and a-book), the trianglewins notes on dimension, and
 several long working conversations. The source map is in `README.md`.

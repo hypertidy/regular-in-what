@@ -195,18 +195,45 @@ outside the ladder not because they are more complicated, but because they
 answer a different question: what is the right cell scheme for a sphere,
 rather than how is this array positioned.
 
-## Meshes and the word "dimension"
+## Grids as meshes {#sec-grids-as-meshes}
 
-The same conflation appears in meshes. Triangulating longitude and latitude
-as planar x and y gives the right topology (which triangle touches which)
-and the wrong geometry: areas and angles are in degrees, distorted toward
-the poles, and the Delaunay property holds on the plane, not on the sphere.
-That is the mesh version of treating a frame as if it were geometry. The
-trianglewins note "On dimension" takes this up, along with the separate
-confusion between coordinate dimension (how many coordinates each vertex
-has) and topological dimension (what kind of shape it is). In array
-software, "dimension" means a third thing again: an axis. A grid with
-`lon(y, x)` has two dimensions, whatever its coordinates.
+Every grid on the ladder is already a mesh. The (i, j) index gives the
+topology for free: each cell is a quad, its corners are vertices, and its
+neighbours are one step away in the index. Turning a grid into triangles
+needs no triangulation algorithm at all. Split each quad in two, and the
+only choice is the diagonal. That choice is real: bilinear interpolation
+in a cell is linear on neither pair of triangles, and the two splits give
+different values at the cell centre.
+
+Triangulate the grid's *points* instead, and the index is thrown away. What
+comes back depends on the frame the triangulation was done in, so the
+title question has a mesh version: Delaunay in what? The trianglewins page
+"Grids as meshes" measures it on one 10 x 10 block of the NSIDC 25 km south
+grid, triangulated in longitude and latitude, in EPSG:3412 and on the
+sphere (geocentric xyz):
+
+- In its own frame and on the sphere, every triangle is half of one grid
+  cell: 162 triangles for 81 cells.
+- In longitude and latitude, near 60S the cells survive but 24 extra
+  sliver triangles fill the block's concave edges. Around the pole only
+  31% of triangles stay inside one cell; the rest fan across the
+  antimeridian cut.
+- Which diagonal each cell gets is a tie in EPSG:3412 and on the sphere
+  alike (the corners of a square lie on a circle, and stereographic
+  projection keeps circles circles), so it is decided by rounding.
+
+The difference from grids is what can be recovered. A grid stored in the
+wrong frame is still regular in its own, and the field guide can find it.
+A triangulation made in the wrong frame is a different triangulation, and
+no frame recovers the right one. Connectivity survives a change of frame;
+straight edges, the Delaunay property, area and angle bounds, and linear
+interpolation weights do not.
+
+The word "dimension" needs care here too. The trianglewins notes separate
+coordinate dimension (how many coordinates each vertex has) from
+topological dimension (what kind of shape it is). In array software,
+"dimension" means a third thing again: an axis. A grid with `lon(y, x)`
+has two dimensions, whatever its coordinates.
 
 ## The question to carry away
 

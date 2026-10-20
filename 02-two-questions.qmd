@@ -133,6 +133,8 @@ the two questions, and mixing them in makes the picture harder to see.
   (GeoTIFF's PixelIsPoint and PixelIsArea)? Are there `n` coordinates or
   `n + 1` edges? Are there CF `bounds` arrays? This is the half-pixel
   problem, and it exists on every rung of the ladder (@fig-centre-edge).
+  Seen as a mesh (@sec-grids-as-meshes), centre and corner are face and
+  node: a value at a corner belongs to a vertex, a cell average to a face.
 
 ![Three equivalent descriptions of one small regular grid: edge coordinates (n + 1 per axis), centre coordinates (n per axis), or extent and dimension.](figures/centre-edge.png){#fig-centre-edge width=60%}
 
@@ -178,4 +180,4 @@ code such as Parcels rotates them before moving particles.
 - **The word "dimension".** In array software a dimension is an axis.
   `lon(y, x)` is one 2D coordinate variable on two dimensions. It does not
   add dimensions. Coordinate dimension and topological dimension are
-  different again; the trianglewins note "On dimension" covers those.
+  different again; the trianglewins notes on dimension cover those.

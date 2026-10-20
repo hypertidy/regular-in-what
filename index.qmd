@@ -73,3 +73,15 @@ The material here was consolidated from blog posts on hypertidy.org
 (2022 to 2026), working notes in the gdal-r-python repository, two earlier
 book drafts (rw-book and a-book), the trianglewins notes on dimension, and
 several long working conversations. The source map is in `README.md`.
+
+## Contributors
+
+Thanks to the people who have improved this book with corrections and
+suggestions:
+
+- Erik van Sebille ([\@erikvansebille](https://github.com/erikvansebille)):
+  velocities on an Arakawa C-grid run along the grid's `i` and `j` axes,
+  not east and north (@sec-two-questions).
+
+Corrections and suggestions are welcome as issues or pull requests at
+<https://github.com/hypertidy/regular-in-what>.

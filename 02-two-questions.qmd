@@ -151,6 +151,23 @@ padding between them), much as UGRID does for meshes. It is not part of
 CF. Staggering answers "where on the cell?", which is a different question
 from the two in this chapter.
 
+Staggering brings a frame question back in through vectors. Model
+velocities are usually stored as components along the grid's own axes,
+not as eastward and northward components. ROMS `u` and `v` run along its
+`xi` and `eta` directions, and the grid file carries an `angle` variable,
+the angle between the `xi` axis and east at each cell centre, so a reader
+can rotate them. The same is true of a regular grid in a projected frame:
+sea ice motion vectors on a polar stereographic or EASE grid are often
+given along grid `x` and `y`, and GRIB has a flag saying whether winds are
+relative to the grid or to east and north. Away from the projection's
+central meridian grid north is not true north, and the angle between
+them changes from cell to cell, even though the grid is regular. CF
+separates the two with standard names: `sea_water_x_velocity` is along
+the grid axis, `eastward_sea_water_velocity` is along the parallel.
+Treating grid-relative components as eastward and northward produces
+currents that look plausible and point the wrong way. Particle tracking
+code such as Parcels rotates them before moving particles.
+
 - **Numeric precision.** Coordinates stored as 32-bit floats carry noise.
   Whether a grid is "regular" is always a question with a tolerance.
 - **The shape of the Earth.** The ladder is deliberately silent about the

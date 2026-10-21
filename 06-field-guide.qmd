@@ -156,6 +156,42 @@ oblique Mercator aligned with the ground track straightens a swath into a
 narrow strip, which makes it far easier to subset and plot even though it
 does not make it regular.
 
+### Bring the data to the grid {#sec-index-space}
+
+The other way to respect a curvilinear grid is to leave it alone and move
+everything else into its index space. Index space is a frame too, the
+"no frame" of @sec-two-questions: fractional column and row, where every
+cell is a unit square. A polygon, a track or a set of points mapped there
+lands on a regular lattice, so any tool built for regular grids (a
+rasteriser, a zonal sum, a window read) works on it unchanged, and the
+answer is already in the grid's own (row, column), ready to index the
+array with no resampling.
+
+Several tools already make this move, with three levels of care:
+
+1. **Vertices to the nearest node.** angstroms' `romsmap()` (for ROMS
+   output, 2017) finds each vertex's nearest grid node. It is quick, and
+   fine for a look, but a long edge then cuts straight across cells it
+   never touches, because a straight line in the data's frame is a curve
+   in index space.
+2. **Edges cut, positions fractional.** Cut every edge into short pieces
+   first, then map each point to fractional (column, row) by finding its
+   cell and inverting the interpolation inside it. The shape is now right.
+   GDAL's warper inverts geolocation arrays this way, through a backmap,
+   and a grid's own triangulation does the same job (@sec-grids-as-meshes).
+   A rasteriser such as controlledburn, run on the unit lattice, then
+   gives cells and coverage fractions in the grid's (row, column).
+3. **Cell outlines in the data's frame.** Fractions of a unit square are
+   fractions of a cell's area only where the mapping is affine within the
+   cell: always for rotated and rectilinear grids, never quite for a
+   curvilinear one. Where exact areas matter, clip each boundary cell's
+   outline, traced from its corner coordinates, in the data's own frame.
+   Step 2 has already found which few cells those are.
+
+The same move is the basis of this book's stance. Keeping the index and
+treating coordinates as a separate mapping is what lets a grid be regular
+in one frame, curvilinear in another, and still be one grid.
+
 ## For data producers
 
 - If the grid is regular in some frame, store that frame (`grid_mapping`

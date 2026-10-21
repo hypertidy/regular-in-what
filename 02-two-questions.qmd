@@ -73,7 +73,8 @@ numbers in some coordinate frame, and there are several kinds:
   `y` as scan angles in radians. Multiplied by the satellite height they
   become metres in PROJ's `geos` projection.
 - **No frame.** Index space only: row and column numbers, or the unit square
-  some plotting functions assume.
+  some plotting functions assume. This is a useful frame in its own right
+  (@sec-index-space).
 
 ## The answer to one depends on the other
 

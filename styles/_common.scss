@@ -90,6 +90,41 @@ div.sourceCode, pre.sourceCode, pre {
   border-radius: 4px;
 }
 
+// Code blocks: full-strength text in both themes. Plain blocks (no language)
+// otherwise inherit Bootstrap's dark pre colour, which vanishes on the dark
+// background, and the a11y light theme uses a mid grey for unmarked tokens.
+div.sourceCode {
+  border: 1px solid $rule-color;
+}
+pre:not(.sourceCode) {
+  border: 1px solid $rule-color;
+  padding: 0.6rem 0.4rem;
+}
+pre, pre code, pre.sourceCode, div.sourceCode, div.sourceCode pre code {
+  color: $code-color;
+}
+
+// Long lines scroll sideways rather than wrap, so aligned blocks (the field
+// guide's decision lists) keep their columns. Make the scroll visible.
+pre, div.sourceCode {
+  overflow-x: auto;
+  scrollbar-width: thin;
+  scrollbar-color: $muted-color $code-bg;
+}
+pre::-webkit-scrollbar { height: 8px; }
+pre::-webkit-scrollbar-track { background: $code-bg; }
+pre::-webkit-scrollbar-thumb { background: $muted-color; border-radius: 4px; }
+
+@media (max-width: 575.98px) {
+  pre code, pre { font-size: 0.8rem; }
+}
+
+// Links: underline sits clear of descenders and stays visible.
+main a:not(.anchorjs-link):not(.quarto-xref-link) {
+  text-underline-offset: 0.18em;
+  text-decoration-thickness: 1px;
+}
+
 // Tables: rule above and below, condensed sans, tabular figures.
 table, .table {
   font-family: $headings-font-family;

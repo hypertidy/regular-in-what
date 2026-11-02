@@ -319,3 +319,149 @@ ax.set_ylabel("row centre latitude")
 ax.set_title("(c) the ragged array:\none integer defines it all")
 ax.set_ylim(-92, 92)
 save(fig, "l3bin.png")
+
+
+# ---------------------------------------------------------------------------
+# One grid, many costumes: cases A to H of tbl-costumes on one small grid
+# ---------------------------------------------------------------------------
+# The grid: 11 x 8 cells of 750 km, regular in Mercator (EPSG:3395), over
+# the south-west Pacific. Mercator is used because it is the one common frame
+# in which every costume from A to F exists: its longitude axis is separable
+# from latitude, so case D (1D longitude and latitude) is possible.
+cnx, cny, cres = 11, 8, 750000.0
+cxmin, cymax = 11100000.0, -1000000.0
+cxe = cxmin + np.arange(cnx + 1) * cres
+cye = cymax - np.arange(cny + 1) * cres
+cxc = (cxe[:-1] + cxe[1:]) / 2
+cyc = (cye[:-1] + cye[1:]) / 2
+merc_ll = Transformer.from_crs("EPSG:3395", "EPSG:4326", always_xy=True)
+clon_e, _ = merc_ll.transform(cxe, np.zeros_like(cxe))
+_, clat_e = merc_ll.transform(np.zeros_like(cye), cye)
+clon_c, _ = merc_ll.transform(cxc, np.zeros_like(cxc))
+_, clat_c = merc_ll.transform(np.zeros_like(cyc), cyc)
+CXC, CYC = np.meshgrid(cxc, cyc)
+CLON, CLAT = merc_ll.transform(CXC, CYC)
+GREY = "#8a8a8a"
+ncell = cnx * cny
+
+
+def rect_lines(ax, xe, ye, color=INK, lw=0.6):
+    for v in xe:
+        ax.plot([v, v], [ye.min(), ye.max()], color=color, lw=lw)
+    for v in ye:
+        ax.plot([xe.min(), xe.max()], [v, v], color=color, lw=lw)
+
+
+def rug(ax, xv, yv, color=ACC):
+    """Show stored 1D coordinate values as ticks on the axes."""
+    ax.plot(xv, np.zeros_like(xv), "|", color=color, ms=7, mew=1.2,
+            transform=ax.get_xaxis_transform(), clip_on=False)
+    ax.plot(np.zeros_like(yv), yv, "_", color=color, ms=7, mew=1.2,
+            transform=ax.get_yaxis_transform(), clip_on=False)
+
+
+def mesh_2d(ax, X, Y, color=INK):
+    """Show stored 2D coordinate pairs: a dot per cell, joined along rows and columns."""
+    for j in range(X.shape[0]):
+        ax.plot(X[j], Y[j], color=color, lw=0.5)
+    for i in range(X.shape[1]):
+        ax.plot(X[:, i], Y[:, i], color=color, lw=0.5)
+    ax.plot(X.ravel(), Y.ravel(), ".", color=ACC, ms=3)
+
+
+def tag(ax, text, color=INK):
+    ax.text(0.97, 0.04, text, transform=ax.transAxes, ha="right", va="bottom",
+            fontsize=8, color=color,
+            bbox=dict(facecolor="white", edgecolor=color, lw=0.6, pad=2))
+
+
+fig, axs = plt.subplots(2, 4, figsize=(12, 6.4))
+axs = axs.ravel()
+km = 1e-3
+
+# A: an array and nothing else
+ax = axs[0]
+rect_lines(ax, np.arange(cnx + 1), np.arange(cny + 1))
+ax.set_xlim(-0.5, cnx + 0.5); ax.set_ylim(cny + 0.5, -0.5)
+ax.set_aspect("equal")
+ax.set_xlabel("column"); ax.set_ylabel("row")
+ax.set_title(f"A  array only\nstored: shape ({cny}, {cnx})")
+tag(ax, "position unknown", GREY)
+
+# B: affine transform plus CRS
+ax = axs[1]
+ax.plot(np.r_[cxe[0], cxe[-1], cxe[-1], cxe[0], cxe[0]] * km,
+        np.r_[cye[0], cye[0], cye[-1], cye[-1], cye[0]] * km, color=INK, lw=0.8)
+ax.add_patch(plt.Rectangle((cxe[0] * km, cye[1] * km), cres * km, cres * km,
+                           facecolor=ACC, alpha=0.5, edgecolor=ACC))
+ax.annotate("origin + one step", (cxe[0] * km, cye[0] * km),
+            xytext=(cxe[2] * km, cye[2] * km), fontsize=8, color=ACC,
+            arrowprops=dict(arrowstyle="->", color=ACC, lw=0.8))
+ax.set_aspect("equal")
+ax.set_xlabel("Mercator x (km)"); ax.set_ylabel("Mercator y (km)")
+ax.set_title("B  affine transform + CRS\nstored: 6 numbers + EPSG:3395")
+tag(ax, "regular")
+
+# C: 1D native x and y
+ax = axs[2]
+rect_lines(ax, cxe * km, cye * km, color="#9fb0c0")
+rug(ax, cxc * km, cyc * km)
+ax.set_aspect("equal")
+ax.set_xlabel("Mercator x (km)"); ax.set_ylabel("Mercator y (km)")
+ax.set_title(f"C  1D x and y vectors\nstored: {cnx} + {cny} values, even steps")
+tag(ax, "regular (degenerate rectilinear)")
+
+# D: 1D longitude and latitude
+ax = axs[3]
+rect_lines(ax, clon_e, clat_e, color="#9fb0c0")
+rug(ax, clon_c, clat_c)
+ax.set_xlabel("longitude"); ax.set_ylabel("latitude")
+ax.set_title(f"D  1D longitude and latitude\nstored: {cnx} + {cny} values, latitude steps vary")
+tag(ax, "regular in Mercator")
+
+# E: 2D longitude and latitude
+ax = axs[4]
+mesh_2d(ax, CLON, CLAT)
+ax.set_xlabel("longitude"); ax.set_ylabel("latitude")
+ax.set_title(f"E  2D longitude and latitude\nstored: 2 x {ncell} values")
+tag(ax, "regular in Mercator")
+
+# F: 2D native x and y
+ax = axs[5]
+mesh_2d(ax, CXC * km, CYC * km)
+ax.set_aspect("equal")
+ax.set_xlabel("Mercator x (km)"); ax.set_ylabel("Mercator y (km)")
+ax.set_title(f"F  2D x and y\nstored: 2 x {ncell} values")
+tag(ax, "regular")
+
+# G: a different grid, genuinely rectilinear (latitude stretched toward the top)
+ax = axs[6]
+s = np.linspace(0, 1, cny + 1)
+glat_e = -53 + 44 * (np.sinh(2.2 * s) / np.sinh(2.2))
+glon_e = np.linspace(100, 174, cnx + 1)
+rect_lines(ax, glon_e, glat_e, color="#b0b0b0")
+rug(ax, (glon_e[:-1] + glon_e[1:]) / 2, (glat_e[:-1] + glat_e[1:]) / 2, color=GREY)
+ax.set_xlabel("longitude"); ax.set_ylabel("latitude")
+ax.set_title(f"G  a different grid: 1D vectors\nstored: {cnx} + {cny} values, needed")
+tag(ax, "rectilinear", GREY)
+
+# H: a different grid, regular in no frame (a smooth non-separable warp)
+ax = axs[7]
+u, v = np.meshgrid(np.linspace(0, 1, cnx), np.linspace(0, 1, cny))
+hlon = 100 + 74 * u + 9 * np.sin(np.pi * v) * (1 - u)
+hlat = -53 + 44 * v + 6 * np.sin(1.5 * np.pi * u) * v
+for j in range(cny):
+    ax.plot(hlon[j], hlat[j], color=GREY, lw=0.5)
+for i in range(cnx):
+    ax.plot(hlon[:, i], hlat[:, i], color=GREY, lw=0.5)
+ax.plot(hlon.ravel(), hlat.ravel(), ".", color=GREY, ms=3)
+ax.set_xlabel("longitude"); ax.set_ylabel("latitude")
+ax.set_title(f"H  a different grid: 2D arrays\nstored: 2 x {ncell} values, needed")
+tag(ax, "curvilinear", GREY)
+
+fig.tight_layout()
+save(fig, "costumes-one-grid.png")
+dlat = np.diff(clat_c)
+print(f"costumes grid: {cnx}x{cny} cells of {cres/1e3:.0f} km in EPSG:3395; "
+      f"lon {clon_e[0]:.2f} to {clon_e[-1]:.2f}, lat {clat_e[-1]:.2f} to {clat_e[0]:.2f}; "
+      f"latitude steps {abs(dlat).min():.2f} to {abs(dlat).max():.2f} deg")

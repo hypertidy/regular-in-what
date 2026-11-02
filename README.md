@@ -30,7 +30,7 @@ grid?" is two questions (index mapping, and frame), plus a third thing
 | 4 Communities | raster-coordinate.md two worlds (survey, 7); xarray-r-design-analysis.md; Grids post (2); On dimension (1) |
 | 5 Software | CORDEX note (4); gdal-hdf5-netcdf-remote.md; gdal-multidim-notes-2026-02-16.md; rrepr notes |
 | 6 Field guide | Detecting hidden grids (3); CORDEX note (4); new simulation in scripts/ |
-| 7 Cases | (3), (4), (5 chat-01, chat-03), (6), (7 OISST fragment) |
+| 7 Cases | rw-book experiments/xarray_unref_matrix.ipynb (6, bare matrix case); (3), (4), (5 chat-01, chat-03), (6), (7 OISST fragment) |
 | 8 Edges | Grids post DGGS / L3bin sections (2); a-book CRS fragment (7); On dimension (1) |
 | Appendices | CORDEX recipes (4); GHRSST fix (6); Grids post references (2) |
 

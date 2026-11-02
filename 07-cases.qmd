@@ -4,6 +4,57 @@ Each case below is a real dataset, chosen because it sits somewhere
 specific in @tbl-costumes. Where numbers are quoted they come from the
 original analyses cited in `README.md`.
 
+## A bare matrix: from array to grid {#sec-case-bare-matrix}
+
+**Stored:** a 36 x 18 array of numbers. **Real grid:** whatever we say it
+is. **Case:** A, made into B.
+
+This case has no dataset, which is the point. Take a matrix with 18 rows
+and 36 columns, holding the values 0 to 647 in order. Nothing in it says
+where it is. Declare that it covers longitude -180 to 180 and latitude -90
+to 90, and it becomes a global grid of 10 degree cells. Those four numbers
+plus the shape say everything; an offset and scale say the same thing
+differently:
+
+```python
+import numpy as np
+nrow, ncol = 18, 36
+aa = np.arange(nrow * ncol, dtype="float64").reshape(nrow, ncol)
+xmin, xmax, ymin, ymax = -180, 180, -90, 90
+gt = [xmin, (xmax - xmin) / ncol, 0, ymax, 0, -(ymax - ymin) / nrow]
+# [-180, 10.0, 0, 90, 0, -10.0]
+```
+
+The geotransform starts from the top left corner and steps down, so the y
+scale is negative. Changing the stride only changes the scale; taking a
+window only changes the offset. That is why graphics and raster software
+like this form, and why it is less readable to a person than the extent.
+
+There are several ways to attach those six numbers to the same bytes, and
+each lives in a different place:
+
+- **In memory.** GDAL's MEM driver can wrap the array without copying it,
+  taking the geotransform as part of the dataset name:
+  `MEM:::DATAPOINTER=<address>,PIXELS=36,LINES=18,BANDS=1,DATATYPE=Float64,GEOTRANSFORM=-180/10/0/90/0/-10`.
+  (Recent GDAL needs `GDAL_MEM_ENABLE_OPEN=YES` before it will open this.)
+- **In a sidecar file.** Write the bytes to `aa.bil` and a few lines of
+  text to `aa.hdr` (`ncols 36`, `nrows 18`, `cellsize 10`,
+  `xllcorner -180`, `yllcorner -90`). Rewrite the header with `cellsize 1`
+  and corners at 0 and the same bytes are case A again.
+- **In a connection string.** `vrt://aa.bil?a_ullr=-180,90,180,-90` assigns
+  the extent without touching either file. This is the same move used to
+  repair real files in @sec-case-ghrsst and @sec-recipes.
+- **As control points.** Two ground control points on opposite corners,
+  pixel (0, 0) at (-180, 90) and pixel (36, 18) at (180, -90), are enough
+  to fix offset and scale. GDAL keeps GCPs separate from a geotransform and
+  resolves them through the warper, so this is the heaviest of the four.
+
+None of these adds information beyond the shape and four numbers. The same
+grid can then be dressed as case C by writing out 36 longitude and 18
+latitude centres, or 37 and 19 edges. Those vectors are what most
+multidimensional formats and xarray hold by default, and they are where
+the rest of the cases in this chapter begin.
+
 ## CryoSat-2 sea ice thickness: cryptic curvilinear {#sec-case-cryosat}
 
 **Stored:** 2D `lon` and `lat`, 316 x 332, no CRS. **Real grid:** regular in

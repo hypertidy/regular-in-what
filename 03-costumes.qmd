@@ -27,6 +27,21 @@ hidden.
 Only G and H store information that could not be recovered from six numbers
 and a frame. Everything from C to F is a regular grid in costume.
 
+@fig-costumes-one-grid makes that concrete. The first six panels are one
+grid: 11 by 8 cells of 750 km, regular in Mercator (EPSG:3395), over the
+south-west Pacific. Mercator is used because it is the one common frame in
+which every costume from A to F can exist; its longitude axis does not
+depend on latitude, so the grid can also be written as two 1D vectors in
+longitude and latitude (case D). In each panel the red marks are what is
+stored. A stores a shape and nothing else. B stores six numbers and a CRS.
+C and D store 19 numbers each, and the spacing test passes for C but not
+for D, whose latitude steps run from 4.4 to 6.5 degrees. E and F store 176
+numbers each. All six describe the same 88 cells. The last two panels are
+different grids, drawn in grey, where the stored arrays are the only
+description there is.
+
+![One grid in six costumes (A to F), and two grids that are not in costume (G and H). Red marks are the stored values: ticks for 1D vectors, dots for 2D arrays. For the more familiar case E, a polar grid stored as 2D longitude and latitude, see @fig-nsidc.](figures/costumes-one-grid.png){#fig-costumes-one-grid}
+
 The labels in the last column are what conventions and software would call
 each case, judging from the stored arrays. They are wrong for C to F. Two of
 those mislabellings are common enough to have names.

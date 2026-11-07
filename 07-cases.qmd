@@ -75,6 +75,10 @@ rather than 1 m), most likely because its coordinates went through a
 different processing chain. Either way the gap to "not regular" is two
 orders of magnitude.
 
+The file itself is archived in [rasterwise](https://rgdal-dev.github.io/rasterwise/) (sha256 `13cc4140fb59...`,
+from issue 20 there), which collects problem files and the lessons attached
+to them.
+
 ## AVISO altimetry: a Mercator grid in longitude and latitude {#sec-case-aviso}
 
 **Stored:** 1D longitude (1080, uniform 1/3 degree) and 1D latitude (915,
@@ -85,6 +89,11 @@ to Mercator y makes the steps constant to 1e-12 (@fig-mercator), and the
 grid is six numbers in a Mercator CRS with a resolution of about 37 km at
 the equator. Treating it as plain longitude and latitude is not wrong for
 indexing, but it hides the metric properties the producer actually used.
+
+This file is the rasterwise case
+[aviso-mercator-as-lonlat](https://rgdal-dev.github.io/rasterwise/cases/aviso-mercator-as-lonlat/), with a
+verified recipe; the ACC front indices in
+[acc-fronts-mercator](https://rgdal-dev.github.io/rasterwise/cases/acc-fronts-mercator/) sit on the same grid.
 
 ## MUR GHRSST: degenerate rectilinear with noise {#sec-case-ghrsst}
 
@@ -166,6 +175,15 @@ latitude of true scale *is* recoverable: the fit had a sharp minimum. The
 repair recipe is in @sec-recipes. One more detail: MAR's axes are in
 kilometres, and GDAL rescales them to metres only once a CRS resolves. With
 the broken mapping, the same bytes give an extent a thousand times smaller.
+
+rasterwise has three more regional climate files with the same underlying
+problem, each written up with a recipe: EUR-44 rotated-pole files with both
+the rotated axes and 2D longitude and latitude
+([rotated-pole-as-lonlat](https://rgdal-dev.github.io/rasterwise/cases/rotated-pole-as-lonlat/), E2), an EUR-11
+file with the rotated frame stripped
+([cordex-rotated-pole-stripped](https://rgdal-dev.github.io/rasterwise/cases/cordex-rotated-pole-stripped/), E),
+and a rotated grid flattened to 2D by `cdo setgridtype,curvilinear`
+([mesan-rotated-pole-as-curvilinear](https://rgdal-dev.github.io/rasterwise/cases/mesan-rotated-pole-as-curvilinear/), E).
 
 ## GOES-16 ABI: coordinates without their frame {#sec-case-goes}
 

@@ -66,3 +66,5 @@
 - MUR GHRSST L4 v4.1, PO.DAAC.
 - GOES-16 ABI-L2-MCMIPF, NOAA and the Earthmover icechunk store
   `earthmover-public/goes-16`.
+- AVISO DT MADT geostrophic velocity (2006 reprocessing), archived with the
+  other problem files in [rasterwise](https://rgdal-dev.github.io/rasterwise/), keyed by sha256.

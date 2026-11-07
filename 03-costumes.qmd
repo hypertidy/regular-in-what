@@ -25,7 +25,9 @@ hidden.
 : Storage forms of a grid, with what is underneath. {#tbl-costumes}
 
 Only G and H store information that could not be recovered from six numbers
-and a frame. Everything from C to F is a regular grid in costume.
+and a frame. Everything from C to F is a regular grid in costume. Real
+files in most of these costumes, each with a write-up of how to read it,
+are indexed by costume in the [rasterwise cases](https://rgdal-dev.github.io/rasterwise/cases/).
 
 @fig-costumes-one-grid makes that concrete. The first six panels are one
 grid: 11 by 8 cells of 750 km, regular in Mercator (EPSG:3395), over the

@@ -30,7 +30,7 @@ grid?" is two questions (index mapping, and frame), plus a third thing
 | 4 Communities | raster-coordinate.md two worlds (survey, 7); xarray-r-design-analysis.md; Grids post (2); On dimension (1) |
 | 5 Software | CORDEX note (4); gdal-hdf5-netcdf-remote.md; gdal-multidim-notes-2026-02-16.md; rrepr notes |
 | 6 Field guide | Detecting hidden grids (3); CORDEX note (4); new simulation in scripts/ |
-| 7 Cases | rw-book experiments/xarray_unref_matrix.ipynb (6, bare matrix case); (3), (4), (5 chat-01, chat-03), (6), (7 OISST fragment) |
+| 7 Cases | rw-book experiments/xarray_unref_matrix.ipynb (6, bare matrix case); (3), (4), (5 chat-01, chat-03), (6), (7 OISST fragment); ndr/zaro session on EOPF Sentinel-2, 8 Nov 2026 (EOPF case) |
 | 8 Edges | Grids post DGGS / L3bin sections (2); a-book CRS fragment (7); On dimension (1) |
 | Appendices | CORDEX recipes (4); GHRSST fix (6); Grids post references (2) |
 
@@ -49,6 +49,9 @@ grid?" is two questions (index mapping, and frame), plus a third thing
 
 ## To check before publishing
 
+- EOPF timings (2.8 s vs 5.9 s) are from one development session against
+  one host. Confirm the r10m, r20m and r60m transforms share an origin
+  before saying the groups align exactly.
 - OISST equal-area mean: "matched exactly" after a warp. Rerun, state the
   observed tolerance, publish the code (ch 7).
 - ORCA northern pole locations: the Grids post says Greenland and Siberia;

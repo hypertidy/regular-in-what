@@ -203,12 +203,20 @@ in one frame, curvilinear in another, and still be one grid.
   `authority` attribute is not CF and readers ignore it.
 - Use 64-bit coordinates, or better, coordinates that are exactly
   representable.
+- Where the format allows it, write the transform itself, with its frame
+  and its registration (GeoZarr `spatial:transform` and
+  `spatial:registration`, for example). If coordinate arrays are written
+  too, for older readers, they are a copy: say so, and make them exactly
+  the transform's values.
 
 ## For data consumers
 
 - Ask "regular in what?" before "is it curvilinear?".
 - Read native axes where they exist; do not reproject coordinates to
   recover a grid that is already on disk.
+- When a transform is declared, trust it and treat coordinate arrays as a
+  check. Reading the arrays costs requests (@sec-case-eopf), and the
+  registration is only in the declaration anyway.
 - Test with a relative tolerance and wrapped angular differences.
 - When a CRS is recovered rather than read, say so, and say which choices
   (family member, latitude of true scale) were made rather than found.

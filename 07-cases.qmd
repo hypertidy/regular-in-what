@@ -55,6 +55,74 @@ latitude centres, or 37 and 19 edges. Those vectors are what most
 multidimensional formats and xarray hold by default, and they are where
 the rest of the cases in this chapter begin.
 
+## EOPF Sentinel-2: one grid, two descriptions {#sec-case-eopf}
+
+**Stored:** a GeoZarr affine transform in metadata, and 1D `x` and `y`
+in the same CRS. **Real grid:** regular in UTM zone 36N, and the file says
+so. **Case:** B and C at once.
+
+Most files in this chapter wear one costume and make the reader guess what
+is underneath. The EOPF Sentinel-2 L2A product in Zarr wears two, and says
+which one is real. Each resolution group, such as
+`measurements/reflectance/r10m` with its four 10980 x 10980 bands, carries
+GeoZarr attributes:
+
+```
+spatial:transform:    [10, 0, 600000, 0, -10, 5600040]
+spatial:registration: pixel
+proj:code:            EPSG:32636
+```
+
+It also carries 1D float32 `x` and `y` arrays of 10980 values each, about
+44 KB apiece. They are the same grid. The pixel centres computed from the
+transform are bit-for-bit identical to the stored values, because every
+centre (600005, 600015, ...) is an integer below 2^24 and float32 holds it
+exactly. There are no 2D coordinates in the store.
+
+Because both forms are present, the cost of the costume can be measured
+with everything else held fixed. In a development session with the R
+packages ndr and zaro against the public store, opening the r10m group by
+reading `x` and `y` and inferring regularity took 5.9 s and three requests.
+Building the index from `spatial:transform` without reading the arrays took
+2.8 s and one request. The arrays are small, so the difference was not
+bytes. The host takes about 1 s to send a first byte, and each coordinate
+array is a round trip, whatever its size. These are timings from one
+session against one host, not a benchmark, but the shape of the result does
+not depend on them: every materialised coordinate array is a request the
+transform does not need.
+
+The transform pays off after opening too:
+
+- **Selection is arithmetic.** A box in UTM metres becomes pixel offsets by
+  the inverse transform, then chunk and byte ranges, so the cost of a read
+  can be worked out before any data moves.
+- **Subsets stay exact.** A window selected in metres kept an exact affine
+  origin (650000, 5550000), rather than one re-inferred from sliced float32
+  values. Each resolution group has its own transform (60 m for r60m).
+- **Registration is stated.** `spatial:registration: pixel` settles the
+  half-cell question. A vector of centres and a vector of corners look the
+  same, so this cannot be recovered from `x` and `y` at all.
+- **Readers agree.** No tolerance is involved, so two readers cannot reach
+  different verdicts on whether the grid is regular.
+
+The inference only worked as well as it did because the numbers were kind.
+The same 10 m grid stored as float32 degrees would have steps of about 9e-5
+degrees and a float32 spacing near 40 degrees of about 4e-6, so the spacing
+test would come down to tolerance (@fig-float32). A 25 m UTM grid in the
+southern hemisphere, with northings near 10,000,000 m, has centres on half
+metres, and float32 cannot hold half metres above 2^23. In both cases the
+transform is exact and the arrays are not.
+
+This is the rectilinear form of a hidden transform: a grid that *is* six
+numbers, also written as coordinate vectors. EOPF is the good version,
+because it keeps the transform and the arrays are only a copy. Write the
+same grid as 2D longitude and latitude and drop the transform, and the
+result is the cryptic curvilinear file of @sec-case-cryosat. The arrays are
+then as large as a band and chunked like it, a selection cannot be planned
+without reading them, and the reader has to work through
+@sec-field-guide just to find out there was a transform. A coordinate array
+is a cache of a function. When you have the function, ship the function.
+
 ## CryoSat-2 sea ice thickness: cryptic curvilinear {#sec-case-cryosat}
 
 **Stored:** 2D `lon` and `lat`, 316 x 332, no CRS. **Real grid:** regular in

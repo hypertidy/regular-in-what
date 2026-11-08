@@ -58,7 +58,12 @@ used for this on hypertidy.org since 2022 is *degenerate rectilinear*: a
 rectilinear container carrying regular content.
 
 This is mostly harmless, because a reader can test the spacing and recover
-the six numbers. It becomes a problem in two ways.
+the six numbers. It is not free: each coordinate vector is something a
+reader has to fetch before it can test anything, and on a remote store that
+is a round trip per array (@sec-case-eopf). A store can also wear two
+costumes at once, B and C, and when it does the transform is the
+description and the vectors are a copy of it. Case C becomes a problem in
+two ways.
 
 First, the spacing test needs a tolerance, and 32-bit storage makes the
 tolerance matter. @fig-float32 shows a regular 0.01 degree longitude axis,

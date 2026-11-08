@@ -26,7 +26,7 @@
   https://sgrid.github.io/sgrid/
 - Parcels documentation, *Grids* (explanation page): structured and
   unstructured grids, C-grid velocities rotated to east and north.
-  https://docs.parcels-code.org/en/latest/user_guide/examples/explanation_grids.html
+  https://docs.parcels-code.org/en/latest/user_guide/fieldsets_grids.html
 - Delandmeter, P. and van Sebille, E. (2019). The Parcels v2.0 Lagrangian
   framework: new field interpolation schemes. *Geoscientific Model
   Development* 12, 3571-3584. https://doi.org/10.5194/gmd-12-3571-2019

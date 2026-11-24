@@ -14,6 +14,7 @@ book:
         - 01-problem.qmd
         - 02-two-questions.qmd
         - 03-costumes.qmd
+        - 04-containers.qmd
     - part: "The people and the tools"
       chapters:
         - 04-communities.qmd

@@ -1,0 +1,161 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1400 1020" width="1400" height="1020">
+<title>One set of chunks, many containers</title>
+<defs><marker id="arr" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto">
+<path d="M 0 0 L 10 5 L 0 10 z" fill="#b5562a"/></marker></defs>
+<rect width="1400" height="1020" fill="white"/>
+<text x="60.0" y="34.0" font-family="DejaVu Sans, Helvetica, Arial, sans-serif" font-size="20" fill="#1d2b36" font-weight="bold" font-style="normal" text-anchor="start">What is known about a source</text>
+<rect x="60.0" y="60.0" width="285.0" height="270.0" rx="8" fill="#f4f7f9" fill-opacity="1" stroke="#c9d3db" stroke-width="1"/>
+<text x="76.0" y="90.0" font-family="DejaVu Sans, Helvetica, Arial, sans-serif" font-size="17" fill="#1d2b36" font-weight="bold" font-style="normal" text-anchor="start">1  Reference</text>
+<text x="76.0" y="114.0" font-family="DejaVu Sans, Helvetica, Arial, sans-serif" font-size="14" fill="#5b6b78" font-weight="normal" font-style="normal" text-anchor="start">a URI, nothing more</text>
+<rect x="392.0" y="60.0" width="285.0" height="270.0" rx="8" fill="#f4f7f9" fill-opacity="1" stroke="#c9d3db" stroke-width="1"/>
+<text x="408.0" y="90.0" font-family="DejaVu Sans, Helvetica, Arial, sans-serif" font-size="17" fill="#1d2b36" font-weight="bold" font-style="normal" text-anchor="start">2  Described container</text>
+<text x="408.0" y="114.0" font-family="DejaVu Sans, Helvetica, Arial, sans-serif" font-size="14" fill="#5b6b78" font-weight="normal" font-style="normal" text-anchor="start">shape, bounds, CRS, bands,</text>
+<text x="408.0" y="133.0" font-family="DejaVu Sans, Helvetica, Arial, sans-serif" font-size="14" fill="#5b6b78" font-weight="normal" font-style="normal" text-anchor="start">data type: read once, cached</text>
+<rect x="724.0" y="60.0" width="285.0" height="270.0" rx="8" fill="#f4f7f9" fill-opacity="1" stroke="#c9d3db" stroke-width="1"/>
+<text x="740.0" y="90.0" font-family="DejaVu Sans, Helvetica, Arial, sans-serif" font-size="17" fill="#1d2b36" font-weight="bold" font-style="normal" text-anchor="start">3  Indexed container</text>
+<text x="740.0" y="114.0" font-family="DejaVu Sans, Helvetica, Arial, sans-serif" font-size="14" fill="#5b6b78" font-weight="normal" font-style="normal" text-anchor="start">plus the internal chunk grid:</text>
+<text x="740.0" y="133.0" font-family="DejaVu Sans, Helvetica, Arial, sans-serif" font-size="14" fill="#5b6b78" font-weight="normal" font-style="normal" text-anchor="start">offset and size of every chunk</text>
+<rect x="1056.0" y="60.0" width="285.0" height="270.0" rx="8" fill="#f4f7f9" fill-opacity="1" stroke="#c9d3db" stroke-width="1"/>
+<text x="1072.0" y="90.0" font-family="DejaVu Sans, Helvetica, Arial, sans-serif" font-size="17" fill="#1d2b36" font-weight="bold" font-style="normal" text-anchor="start">4  Chunk rows</text>
+<text x="1072.0" y="114.0" font-family="DejaVu Sans, Helvetica, Arial, sans-serif" font-size="14" fill="#5b6b78" font-weight="normal" font-style="normal" text-anchor="start">each chunk its own row,</text>
+<text x="1072.0" y="133.0" font-family="DejaVu Sans, Helvetica, Arial, sans-serif" font-size="14" fill="#5b6b78" font-weight="normal" font-style="normal" text-anchor="start">keyed by source and grid index</text>
+<path d="M 157.5 172 h 66 l 24 24 v 106 h -90 Z" fill="white" stroke="#1d2b36" stroke-width="1.5"/>
+<path d="M 223.5 172 v 24 h 24" fill="none" stroke="#1d2b36" stroke-width="1.5"/>
+<text x="202.5" y="264.0" font-family="DejaVu Sans, Helvetica, Arial, sans-serif" font-size="44" fill="#5b6b78" font-weight="bold" font-style="normal" text-anchor="middle">?</text>
+<path d="M 489.5 172 h 66 l 24 24 v 106 h -90 Z" fill="white" stroke="#1d2b36" stroke-width="1.5"/>
+<path d="M 555.5 172 v 24 h 24" fill="none" stroke="#1d2b36" stroke-width="1.5"/>
+<rect x="501.5" y="212.0" width="66.0" height="50.0" rx="3" fill="#e3edf5" fill-opacity="1" stroke="#2f6f9f" stroke-width="1"/>
+<text x="534.5" y="228.0" font-family="DejaVu Sans, Helvetica, Arial, sans-serif" font-size="11" fill="#2f6f9f" font-weight="normal" font-style="normal" text-anchor="middle">shape</text>
+<text x="534.5" y="242.0" font-family="DejaVu Sans, Helvetica, Arial, sans-serif" font-size="11" fill="#2f6f9f" font-weight="normal" font-style="normal" text-anchor="middle">bounds</text>
+<text x="534.5" y="256.0" font-family="DejaVu Sans, Helvetica, Arial, sans-serif" font-size="11" fill="#2f6f9f" font-weight="normal" font-style="normal" text-anchor="middle">crs</text>
+<path d="M 821.5 172 h 66 l 24 24 v 106 h -90 Z" fill="white" stroke="#1d2b36" stroke-width="1.5"/>
+<path d="M 887.5 172 v 24 h 24" fill="none" stroke="#1d2b36" stroke-width="1.5"/>
+<rect x="833.5" y="208.0" width="22.0" height="22.0" rx="0" fill="#e3edf5" fill-opacity="1" stroke="#2f6f9f" stroke-width="1"/>
+<rect x="855.5" y="208.0" width="22.0" height="22.0" rx="0" fill="#e3edf5" fill-opacity="1" stroke="#2f6f9f" stroke-width="1"/>
+<rect x="877.5" y="208.0" width="22.0" height="22.0" rx="0" fill="#e3edf5" fill-opacity="1" stroke="#2f6f9f" stroke-width="1"/>
+<rect x="833.5" y="230.0" width="22.0" height="22.0" rx="0" fill="#e3edf5" fill-opacity="1" stroke="#2f6f9f" stroke-width="1"/>
+<rect x="855.5" y="230.0" width="22.0" height="22.0" rx="0" fill="#e3edf5" fill-opacity="1" stroke="#2f6f9f" stroke-width="1"/>
+<rect x="877.5" y="230.0" width="22.0" height="22.0" rx="0" fill="#e3edf5" fill-opacity="1" stroke="#2f6f9f" stroke-width="1"/>
+<rect x="833.5" y="252.0" width="22.0" height="22.0" rx="0" fill="#e3edf5" fill-opacity="1" stroke="#2f6f9f" stroke-width="1"/>
+<rect x="855.5" y="252.0" width="22.0" height="22.0" rx="0" fill="#e3edf5" fill-opacity="1" stroke="#2f6f9f" stroke-width="1"/>
+<rect x="877.5" y="252.0" width="22.0" height="22.0" rx="0" fill="#e3edf5" fill-opacity="1" stroke="#2f6f9f" stroke-width="1"/>
+<rect x="833.5" y="274.0" width="22.0" height="22.0" rx="0" fill="#e3edf5" fill-opacity="1" stroke="#2f6f9f" stroke-width="1"/>
+<rect x="855.5" y="274.0" width="22.0" height="22.0" rx="0" fill="#e3edf5" fill-opacity="1" stroke="#2f6f9f" stroke-width="1"/>
+<rect x="877.5" y="274.0" width="22.0" height="22.0" rx="0" fill="#e3edf5" fill-opacity="1" stroke="#2f6f9f" stroke-width="1"/>
+<rect x="1103.5" y="174.0" width="190.0" height="17.0" rx="0" fill="#d5e3ee" fill-opacity="1" stroke="#2f6f9f" stroke-width="1"/>
+<text x="1111.5" y="186.5" font-family="DejaVu Sans, Helvetica, Arial, sans-serif" font-size="11" fill="#1d2b36" font-weight="bold" font-style="normal" text-anchor="start">src</text>
+<text x="1151.5" y="186.5" font-family="DejaVu Sans, Helvetica, Arial, sans-serif" font-size="11" fill="#1d2b36" font-weight="bold" font-style="normal" text-anchor="end">i</text>
+<text x="1175.5" y="186.5" font-family="DejaVu Sans, Helvetica, Arial, sans-serif" font-size="11" fill="#1d2b36" font-weight="bold" font-style="normal" text-anchor="end">j</text>
+<text x="1235.5" y="186.5" font-family="DejaVu Sans, Helvetica, Arial, sans-serif" font-size="11" fill="#1d2b36" font-weight="bold" font-style="normal" text-anchor="end">offset</text>
+<text x="1283.5" y="186.5" font-family="DejaVu Sans, Helvetica, Arial, sans-serif" font-size="11" fill="#1d2b36" font-weight="bold" font-style="normal" text-anchor="end">size</text>
+<rect x="1103.5" y="191.0" width="190.0" height="17.0" rx="0" fill="white" fill-opacity="1" stroke="#c9d3db" stroke-width="1"/>
+<text x="1111.5" y="203.5" font-family="DejaVu Sans, Helvetica, Arial, sans-serif" font-size="11" fill="#1d2b36" font-weight="normal" font-style="normal" text-anchor="start">a</text>
+<text x="1151.5" y="203.5" font-family="DejaVu Sans, Helvetica, Arial, sans-serif" font-size="11" fill="#1d2b36" font-weight="normal" font-style="normal" text-anchor="end">0</text>
+<text x="1175.5" y="203.5" font-family="DejaVu Sans, Helvetica, Arial, sans-serif" font-size="11" fill="#1d2b36" font-weight="normal" font-style="normal" text-anchor="end">0</text>
+<text x="1235.5" y="203.5" font-family="DejaVu Sans, Helvetica, Arial, sans-serif" font-size="11" fill="#1d2b36" font-weight="normal" font-style="normal" text-anchor="end">512</text>
+<text x="1283.5" y="203.5" font-family="DejaVu Sans, Helvetica, Arial, sans-serif" font-size="11" fill="#1d2b36" font-weight="normal" font-style="normal" text-anchor="end">4096</text>
+<rect x="1103.5" y="208.0" width="190.0" height="17.0" rx="0" fill="white" fill-opacity="1" stroke="#c9d3db" stroke-width="1"/>
+<text x="1111.5" y="220.5" font-family="DejaVu Sans, Helvetica, Arial, sans-serif" font-size="11" fill="#1d2b36" font-weight="normal" font-style="normal" text-anchor="start">a</text>
+<text x="1151.5" y="220.5" font-family="DejaVu Sans, Helvetica, Arial, sans-serif" font-size="11" fill="#1d2b36" font-weight="normal" font-style="normal" text-anchor="end">0</text>
+<text x="1175.5" y="220.5" font-family="DejaVu Sans, Helvetica, Arial, sans-serif" font-size="11" fill="#1d2b36" font-weight="normal" font-style="normal" text-anchor="end">1</text>
+<text x="1235.5" y="220.5" font-family="DejaVu Sans, Helvetica, Arial, sans-serif" font-size="11" fill="#1d2b36" font-weight="normal" font-style="normal" text-anchor="end">4608</text>
+<text x="1283.5" y="220.5" font-family="DejaVu Sans, Helvetica, Arial, sans-serif" font-size="11" fill="#1d2b36" font-weight="normal" font-style="normal" text-anchor="end">4011</text>
+<rect x="1103.5" y="225.0" width="190.0" height="17.0" rx="0" fill="white" fill-opacity="1" stroke="#c9d3db" stroke-width="1"/>
+<text x="1111.5" y="237.5" font-family="DejaVu Sans, Helvetica, Arial, sans-serif" font-size="11" fill="#1d2b36" font-weight="normal" font-style="normal" text-anchor="start">a</text>
+<text x="1151.5" y="237.5" font-family="DejaVu Sans, Helvetica, Arial, sans-serif" font-size="11" fill="#1d2b36" font-weight="normal" font-style="normal" text-anchor="end">1</text>
+<text x="1175.5" y="237.5" font-family="DejaVu Sans, Helvetica, Arial, sans-serif" font-size="11" fill="#1d2b36" font-weight="normal" font-style="normal" text-anchor="end">0</text>
+<text x="1235.5" y="237.5" font-family="DejaVu Sans, Helvetica, Arial, sans-serif" font-size="11" fill="#1d2b36" font-weight="normal" font-style="normal" text-anchor="end">8619</text>
+<text x="1283.5" y="237.5" font-family="DejaVu Sans, Helvetica, Arial, sans-serif" font-size="11" fill="#1d2b36" font-weight="normal" font-style="normal" text-anchor="end">3987</text>
+<rect x="1103.5" y="242.0" width="190.0" height="17.0" rx="0" fill="white" fill-opacity="1" stroke="#c9d3db" stroke-width="1"/>
+<text x="1111.5" y="254.5" font-family="DejaVu Sans, Helvetica, Arial, sans-serif" font-size="11" fill="#1d2b36" font-weight="normal" font-style="normal" text-anchor="start">a</text>
+<text x="1151.5" y="254.5" font-family="DejaVu Sans, Helvetica, Arial, sans-serif" font-size="11" fill="#1d2b36" font-weight="normal" font-style="normal" text-anchor="end">1</text>
+<text x="1175.5" y="254.5" font-family="DejaVu Sans, Helvetica, Arial, sans-serif" font-size="11" fill="#1d2b36" font-weight="normal" font-style="normal" text-anchor="end">1</text>
+<text x="1235.5" y="254.5" font-family="DejaVu Sans, Helvetica, Arial, sans-serif" font-size="11" fill="#1d2b36" font-weight="normal" font-style="normal" text-anchor="end">12606</text>
+<text x="1283.5" y="254.5" font-family="DejaVu Sans, Helvetica, Arial, sans-serif" font-size="11" fill="#1d2b36" font-weight="normal" font-style="normal" text-anchor="end">4100</text>
+<rect x="1103.5" y="259.0" width="190.0" height="17.0" rx="0" fill="white" fill-opacity="1" stroke="#c9d3db" stroke-width="1"/>
+<text x="1111.5" y="271.5" font-family="DejaVu Sans, Helvetica, Arial, sans-serif" font-size="11" fill="#1d2b36" font-weight="normal" font-style="normal" text-anchor="start">b</text>
+<text x="1151.5" y="271.5" font-family="DejaVu Sans, Helvetica, Arial, sans-serif" font-size="11" fill="#1d2b36" font-weight="normal" font-style="normal" text-anchor="end">0</text>
+<text x="1175.5" y="271.5" font-family="DejaVu Sans, Helvetica, Arial, sans-serif" font-size="11" fill="#1d2b36" font-weight="normal" font-style="normal" text-anchor="end">0</text>
+<text x="1235.5" y="271.5" font-family="DejaVu Sans, Helvetica, Arial, sans-serif" font-size="11" fill="#1d2b36" font-weight="normal" font-style="normal" text-anchor="end">512</text>
+<text x="1283.5" y="271.5" font-family="DejaVu Sans, Helvetica, Arial, sans-serif" font-size="11" fill="#1d2b36" font-weight="normal" font-style="normal" text-anchor="end">3870</text>
+<rect x="1103.5" y="276.0" width="190.0" height="17.0" rx="0" fill="white" fill-opacity="1" stroke="#c9d3db" stroke-width="1"/>
+<text x="1111.5" y="288.5" font-family="DejaVu Sans, Helvetica, Arial, sans-serif" font-size="11" fill="#1d2b36" font-weight="normal" font-style="normal" text-anchor="start">...</text>
+<text x="1151.5" y="288.5" font-family="DejaVu Sans, Helvetica, Arial, sans-serif" font-size="11" fill="#1d2b36" font-weight="normal" font-style="normal" text-anchor="end"></text>
+<text x="1175.5" y="288.5" font-family="DejaVu Sans, Helvetica, Arial, sans-serif" font-size="11" fill="#1d2b36" font-weight="normal" font-style="normal" text-anchor="end"></text>
+<text x="1235.5" y="288.5" font-family="DejaVu Sans, Helvetica, Arial, sans-serif" font-size="11" fill="#1d2b36" font-weight="normal" font-style="normal" text-anchor="end"></text>
+<text x="1283.5" y="288.5" font-family="DejaVu Sans, Helvetica, Arial, sans-serif" font-size="11" fill="#1d2b36" font-weight="normal" font-style="normal" text-anchor="end"></text>
+<line x1="349.0" y1="210.0" x2="388.0" y2="210.0" stroke="#b5562a" stroke-width="2.5" marker-end="url(#arr)"/>
+<line x1="681.0" y1="210.0" x2="720.0" y2="210.0" stroke="#b5562a" stroke-width="2.5" marker-end="url(#arr)"/>
+<line x1="1013.0" y1="210.0" x2="1052.0" y2="210.0" stroke="#b5562a" stroke-width="2.5" marker-end="url(#arr)"/>
+<text x="368.5" y="198.0" font-family="DejaVu Sans, Helvetica, Arial, sans-serif" font-size="14" fill="#b5562a" font-weight="bold" font-style="normal" text-anchor="middle">describe</text>
+<text x="700.5" y="198.0" font-family="DejaVu Sans, Helvetica, Arial, sans-serif" font-size="14" fill="#b5562a" font-weight="bold" font-style="normal" text-anchor="middle">index</text>
+<text x="1032.5" y="198.0" font-family="DejaVu Sans, Helvetica, Arial, sans-serif" font-size="14" fill="#b5562a" font-weight="bold" font-style="normal" text-anchor="middle">split</text>
+<text x="60.0" y="356.0" font-family="DejaVu Sans, Helvetica, Arial, sans-serif" font-size="14" fill="#5b6b78" font-weight="normal" font-style="italic" text-anchor="start">Moving right is always the same operation: expanding a reference into more specific references. Nothing about the bytes changes.</text>
+<text x="60.0" y="400.0" font-family="DejaVu Sans, Helvetica, Arial, sans-serif" font-size="20" fill="#1d2b36" font-weight="bold" font-style="normal" text-anchor="start">Which rungs each format writes down</text>
+<line x1="202.5" y1="430.0" x2="202.5" y2="800.0" stroke="#c9d3db" stroke-width="1" stroke-dasharray="3,4"/>
+<circle cx="202.5" cy="418.0" r="11" fill="white" stroke="#5b6b78" stroke-width="1.2"/>
+<text x="202.5" y="422.5" font-family="DejaVu Sans, Helvetica, Arial, sans-serif" font-size="13" fill="#5b6b78" font-weight="bold" font-style="normal" text-anchor="middle">1</text>
+<line x1="534.5" y1="430.0" x2="534.5" y2="800.0" stroke="#c9d3db" stroke-width="1" stroke-dasharray="3,4"/>
+<circle cx="534.5" cy="418.0" r="11" fill="white" stroke="#5b6b78" stroke-width="1.2"/>
+<text x="534.5" y="422.5" font-family="DejaVu Sans, Helvetica, Arial, sans-serif" font-size="13" fill="#5b6b78" font-weight="bold" font-style="normal" text-anchor="middle">2</text>
+<line x1="866.5" y1="430.0" x2="866.5" y2="800.0" stroke="#c9d3db" stroke-width="1" stroke-dasharray="3,4"/>
+<circle cx="866.5" cy="418.0" r="11" fill="white" stroke="#5b6b78" stroke-width="1.2"/>
+<text x="866.5" y="422.5" font-family="DejaVu Sans, Helvetica, Arial, sans-serif" font-size="13" fill="#5b6b78" font-weight="bold" font-style="normal" text-anchor="middle">3</text>
+<line x1="1198.5" y1="430.0" x2="1198.5" y2="800.0" stroke="#c9d3db" stroke-width="1" stroke-dasharray="3,4"/>
+<circle cx="1198.5" cy="418.0" r="11" fill="white" stroke="#5b6b78" stroke-width="1.2"/>
+<text x="1198.5" y="422.5" font-family="DejaVu Sans, Helvetica, Arial, sans-serif" font-size="13" fill="#5b6b78" font-weight="bold" font-style="normal" text-anchor="middle">4</text>
+<text x="58" y="452" font-family="DejaVu Sans, Helvetica, Arial, sans-serif" font-size="14"><tspan fill="#1d2b36" font-weight="bold">STAC item / asset</tspan><tspan fill="#5b6b78" font-size="12.5" dx="12">catalogue: a URI plus cached facts; an asset can link to a refs file</tspan></text>
+<rect x="188.5" y="458.0" width="360.0" height="16.0" rx="8" fill="#7a9cc0" fill-opacity="1" stroke="none" stroke-width="1"/>
+<line x1="548.5" y1="466.0" x2="860.5" y2="466.0" stroke="#7a9cc0" stroke-width="2" stroke-dasharray="2,4"/>
+<circle cx="866.5" cy="466.0" r="6" fill="white" stroke="#7a9cc0" stroke-width="2"/>
+<text x="878.5" y="470.0" font-family="DejaVu Sans, Helvetica, Arial, sans-serif" font-size="11.5" fill="#7a9cc0" font-weight="normal" font-style="italic" text-anchor="start">href</text>
+<text x="58" y="498" font-family="DejaVu Sans, Helvetica, Arial, sans-serif" font-size="14"><tspan fill="#1d2b36" font-weight="bold">COG, GeoTIFF</tspan><tspan fill="#5b6b78" font-size="12.5" dx="12">a self-describing file: header and tile offsets inside it</tspan></text>
+<rect x="520.5" y="504.0" width="360.0" height="16.0" rx="8" fill="#8aa67a" fill-opacity="1" stroke="none" stroke-width="1"/>
+<text x="58" y="544" font-family="DejaVu Sans, Helvetica, Arial, sans-serif" font-size="14"><tspan fill="#1d2b36" font-weight="bold">netCDF / HDF5</tspan><tspan fill="#5b6b78" font-size="12.5" dx="12">the same, with the chunk index behind a B-tree</tspan></text>
+<rect x="520.5" y="550.0" width="360.0" height="16.0" rx="8" fill="#8aa67a" fill-opacity="1" stroke="none" stroke-width="1"/>
+<text x="58" y="590" font-family="DejaVu Sans, Helvetica, Arial, sans-serif" font-size="14"><tspan fill="#1d2b36" font-weight="bold">Kerchunk, VirtualiZarr manifest</tspan><tspan fill="#5b6b78" font-size="12.5" dx="12">the chunk index pulled out of the file</tspan></text>
+<rect x="852.5" y="596.0" width="360.0" height="16.0" rx="8" fill="#c09a5a" fill-opacity="1" stroke="none" stroke-width="1"/>
+<text x="58" y="636" font-family="DejaVu Sans, Helvetica, Arial, sans-serif" font-size="14"><tspan fill="#1d2b36" font-weight="bold">Icechunk</tspan><tspan fill="#5b6b78" font-size="12.5" dx="12">the same, versioned, with transactions</tspan></text>
+<rect x="852.5" y="642.0" width="360.0" height="16.0" rx="8" fill="#c09a5a" fill-opacity="1" stroke="none" stroke-width="1"/>
+<text x="58" y="682" font-family="DejaVu Sans, Helvetica, Arial, sans-serif" font-size="14"><tspan fill="#1d2b36" font-weight="bold">Zarr v3 store</tspan><tspan fill="#5b6b78" font-size="12.5" dx="12">zarr.json describes; each chunk is an object key, so the key is the index</tspan></text>
+<rect x="494.5" y="688.0" width="80.0" height="16.0" rx="8" fill="#9a86b8" fill-opacity="1" stroke="none" stroke-width="1"/>
+<rect x="1158.5" y="688.0" width="80.0" height="16.0" rx="8" fill="#9a86b8" fill-opacity="1" stroke="none" stroke-width="1"/>
+<line x1="574.5" y1="696.0" x2="1158.5" y2="696.0" stroke="#9a86b8" stroke-width="1.5" stroke-dasharray="2,5"/>
+<rect x="814.5" y="688.0" width="104.0" height="16.0" rx="0" fill="white" fill-opacity="1" stroke="none" stroke-width="1"/>
+<text x="866.5" y="700.0" font-family="DejaVu Sans, Helvetica, Arial, sans-serif" font-size="11.5" fill="#9a86b8" font-weight="normal" font-style="italic" text-anchor="middle">no stored index</text>
+<text x="58" y="728" font-family="DejaVu Sans, Helvetica, Arial, sans-serif" font-size="14"><tspan fill="#1d2b36" font-weight="bold">byterefs tables</tspan><tspan fill="#5b6b78" font-size="12.5" dx="12">sources table (rung 2) and chunk rows (rung 4) as plain tables</tspan></text>
+<rect x="520.5" y="734.0" width="692.0" height="16.0" rx="8" fill="#2f6f9f" fill-opacity="1" stroke="none" stroke-width="1"/>
+<text x="58.0" y="784.0" font-family="DejaVu Sans, Helvetica, Arial, sans-serif" font-size="14" fill="#1d2b36" font-weight="bold" font-style="normal" text-anchor="start">Views: VRT, xarray Dataset, Zarr hierarchy, an engine's RASTER value</text>
+<rect x="188.5" y="790.0" width="1024.0" height="26.0" rx="13" fill="white" fill-opacity="1" stroke="#6b7a86" stroke-width="2" stroke-dasharray="6,4"/>
+<text x="700.5" y="808.0" font-family="DejaVu Sans, Helvetica, Arial, sans-serif" font-size="12.5" fill="#6b7a86" font-weight="normal" font-style="normal" text-anchor="middle">a recipe for assembling pieces: can sit over any rung, including other views</text>
+<text x="60.0" y="900.0" font-family="DejaVu Sans, Helvetica, Arial, sans-serif" font-size="20" fill="#1d2b36" font-weight="bold" font-style="normal" text-anchor="start">At rung 4, dimensionality is just the number of index columns</text>
+<text x="60.0" y="926.0" font-family="DejaVu Sans, Helvetica, Arial, sans-serif" font-size="13" fill="#5b6b78" font-weight="normal" font-style="normal" text-anchor="start">a COG tile</text>
+<rect x="60.0" y="934.0" width="58.0" height="20.0" rx="0" fill="#e3edf5" fill-opacity="1" stroke="#2f6f9f" stroke-width="1"/>
+<text x="89.0" y="948.0" font-family="DejaVu Sans, Helvetica, Arial, sans-serif" font-size="12" fill="#2f6f9f" font-weight="bold" font-style="normal" text-anchor="middle">band</text>
+<rect x="118.0" y="934.0" width="58.0" height="20.0" rx="0" fill="#e3edf5" fill-opacity="1" stroke="#2f6f9f" stroke-width="1"/>
+<text x="147.0" y="948.0" font-family="DejaVu Sans, Helvetica, Arial, sans-serif" font-size="12" fill="#2f6f9f" font-weight="bold" font-style="normal" text-anchor="middle">row</text>
+<rect x="176.0" y="934.0" width="58.0" height="20.0" rx="0" fill="#e3edf5" fill-opacity="1" stroke="#2f6f9f" stroke-width="1"/>
+<text x="205.0" y="948.0" font-family="DejaVu Sans, Helvetica, Arial, sans-serif" font-size="12" fill="#2f6f9f" font-weight="bold" font-style="normal" text-anchor="middle">col</text>
+<rect x="242.0" y="934.0" width="70.0" height="20.0" rx="0" fill="white" fill-opacity="1" stroke="#c9d3db" stroke-width="1"/>
+<text x="277.0" y="948.0" font-family="DejaVu Sans, Helvetica, Arial, sans-serif" font-size="12" fill="#1d2b36" font-weight="normal" font-style="normal" text-anchor="middle">uri</text>
+<rect x="312.0" y="934.0" width="70.0" height="20.0" rx="0" fill="white" fill-opacity="1" stroke="#c9d3db" stroke-width="1"/>
+<text x="347.0" y="948.0" font-family="DejaVu Sans, Helvetica, Arial, sans-serif" font-size="12" fill="#1d2b36" font-weight="normal" font-style="normal" text-anchor="middle">offset</text>
+<rect x="382.0" y="934.0" width="70.0" height="20.0" rx="0" fill="white" fill-opacity="1" stroke="#c9d3db" stroke-width="1"/>
+<text x="417.0" y="948.0" font-family="DejaVu Sans, Helvetica, Arial, sans-serif" font-size="12" fill="#1d2b36" font-weight="normal" font-style="normal" text-anchor="middle">size</text>
+<text x="700.0" y="926.0" font-family="DejaVu Sans, Helvetica, Arial, sans-serif" font-size="13" fill="#5b6b78" font-weight="normal" font-style="normal" text-anchor="start">a netCDF chunk</text>
+<rect x="700.0" y="934.0" width="58.0" height="20.0" rx="0" fill="#e3edf5" fill-opacity="1" stroke="#2f6f9f" stroke-width="1"/>
+<text x="729.0" y="948.0" font-family="DejaVu Sans, Helvetica, Arial, sans-serif" font-size="12" fill="#2f6f9f" font-weight="bold" font-style="normal" text-anchor="middle">time</text>
+<rect x="758.0" y="934.0" width="58.0" height="20.0" rx="0" fill="#e3edf5" fill-opacity="1" stroke="#2f6f9f" stroke-width="1"/>
+<text x="787.0" y="948.0" font-family="DejaVu Sans, Helvetica, Arial, sans-serif" font-size="12" fill="#2f6f9f" font-weight="bold" font-style="normal" text-anchor="middle">depth</text>
+<rect x="816.0" y="934.0" width="58.0" height="20.0" rx="0" fill="#e3edf5" fill-opacity="1" stroke="#2f6f9f" stroke-width="1"/>
+<text x="845.0" y="948.0" font-family="DejaVu Sans, Helvetica, Arial, sans-serif" font-size="12" fill="#2f6f9f" font-weight="bold" font-style="normal" text-anchor="middle">y</text>
+<rect x="874.0" y="934.0" width="58.0" height="20.0" rx="0" fill="#e3edf5" fill-opacity="1" stroke="#2f6f9f" stroke-width="1"/>
+<text x="903.0" y="948.0" font-family="DejaVu Sans, Helvetica, Arial, sans-serif" font-size="12" fill="#2f6f9f" font-weight="bold" font-style="normal" text-anchor="middle">x</text>
+<rect x="940.0" y="934.0" width="70.0" height="20.0" rx="0" fill="white" fill-opacity="1" stroke="#c9d3db" stroke-width="1"/>
+<text x="975.0" y="948.0" font-family="DejaVu Sans, Helvetica, Arial, sans-serif" font-size="12" fill="#1d2b36" font-weight="normal" font-style="normal" text-anchor="middle">uri</text>
+<rect x="1010.0" y="934.0" width="70.0" height="20.0" rx="0" fill="white" fill-opacity="1" stroke="#c9d3db" stroke-width="1"/>
+<text x="1045.0" y="948.0" font-family="DejaVu Sans, Helvetica, Arial, sans-serif" font-size="12" fill="#1d2b36" font-weight="normal" font-style="normal" text-anchor="middle">offset</text>
+<rect x="1080.0" y="934.0" width="70.0" height="20.0" rx="0" fill="white" fill-opacity="1" stroke="#c9d3db" stroke-width="1"/>
+<text x="1115.0" y="948.0" font-family="DejaVu Sans, Helvetica, Arial, sans-serif" font-size="12" fill="#1d2b36" font-weight="normal" font-style="normal" text-anchor="middle">size</text>
+<text x="60.0" y="988.0" font-family="DejaVu Sans, Helvetica, Arial, sans-serif" font-size="14" fill="#5b6b78" font-weight="normal" font-style="italic" text-anchor="start">The 2D-raster versus multidimensional split lives in the view, where dimensions get meaning and coordinates.</text>
+</svg>

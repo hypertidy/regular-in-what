@@ -125,6 +125,10 @@ ladder describes geometry, the frame describes what the numbers mean, and
 storage describes what the producer wrote down. Three different things,
 routinely collapsed into one word.
 
+Storage has a second half: not what was written about positions, but where
+the bytes are and how much is known about where they are. @sec-containers
+follows that half, with a ladder of its own.
+
 ## Things that are not part of either question
 
 Several nearby issues are real and important, but they are separate from

@@ -11,6 +11,8 @@ Build: `quarto render` (HTML into `_book/`). Pushes to `main` are rendered
 and published to GitHub Pages by `.github/workflows/publish.yml`. Code chunks are not executed.
 Figures: `python3 scripts/make_figures.py` (needs numpy, matplotlib,
 pyproj) writes `figures/*.png` and prints the numbers quoted in the text.
+`python3 scripts/make_chunk_ladder.py` (no dependencies) writes
+`figures/chunk-ladder.svg`.
 Content is ASCII only.
 
 ## Stance
@@ -27,11 +29,12 @@ grid?" is two questions (index mapping, and frame), plus a third thing
 | 1 One file, two grids | Coordinates broken in NetCDF (survey); Detecting hidden grids (3) |
 | 2 Two questions | Grids post (2); CORDEX note (4); On dimension (1) |
 | 3 Many costumes | rw-book grids.qmd A to H (6); a-book grid taxonomy (7); Degenerate rectilinear post; GHRSST chapter (6); GOES chat (5) |
-| 4 Communities | raster-coordinate.md two worlds (survey, 7); xarray-r-design-analysis.md; Grids post (2); On dimension (1) |
-| 5 Software | CORDEX note (4); gdal-hdf5-netcdf-remote.md; gdal-multidim-notes-2026-02-16.md; rrepr notes |
-| 6 Field guide | Detecting hidden grids (3); CORDEX note (4); new simulation in scripts/ |
-| 7 Cases | rw-book experiments/xarray_unref_matrix.ipynb (6, bare matrix case); (3), (4), (5 chat-01, chat-03), (6), (7 OISST fragment); ndr/zaro session on EOPF Sentinel-2, 8 Nov 2026 (EOPF case) |
-| 8 Edges | Grids post DGGS / L3bin sections (2); a-book CRS fragment (7); On dimension (1) |
+| 4 Many containers | sedona-db#1598 discussion (Nov 2026); byterefs spec; m16 versioned byte-ref table (wxylib/design); tensors-and-tables post |
+| 5 Communities | raster-coordinate.md two worlds (survey, 7); xarray-r-design-analysis.md; Grids post (2); On dimension (1) |
+| 6 Software | CORDEX note (4); gdal-hdf5-netcdf-remote.md; gdal-multidim-notes-2026-02-16.md; rrepr notes |
+| 7 Field guide | Detecting hidden grids (3); CORDEX note (4); new simulation in scripts/ |
+| 8 Cases | rw-book experiments/xarray_unref_matrix.ipynb (6, bare matrix case); (3), (4), (5 chat-01, chat-03), (6), (7 OISST fragment); ndr/zaro session on EOPF Sentinel-2, 8 Nov 2026 (EOPF case) |
+| 9 Edges | Grids post DGGS / L3bin sections (2); a-book CRS fragment (7); On dimension (1) |
 | Appendices | CORDEX recipes (4); GHRSST fix (6); Grids post references (2) |
 
 ## Decisions taken in this draft
